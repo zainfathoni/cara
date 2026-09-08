@@ -9,7 +9,7 @@ date: 2026-08-09
 
 Matt Pocock's skills v1.2 promotes `wizard` as a model-invoked skill. It generates an interactive shell script for human-only setup work, including `.env` updates and GitHub Actions secrets.
 
-The v1.2.3 fixed template accepts `ENV_FILE` without constraining it to the repository, rewrites that path without rejecting symlinks or applying a restrictive mode, and sends secrets and variables to the GitHub repository selected by ambient `gh` context. The generated stages are arbitrary shell below the fixed template marker. These boundaries are broader than Agent Workflows' local-file and shared-service approval rules.
+The v1.2.3 fixed template accepts `ENV_FILE` without constraining it to the repository, rewrites that path without rejecting symlinks or applying a restrictive mode, and sends secrets and variables to the GitHub repository selected by ambient `gh` context. The generated stages are arbitrary shell below the fixed template marker. These boundaries are broader than Cara's local-file and shared-service approval rules.
 
 ## Decision
 
@@ -25,6 +25,6 @@ Reconsider `wizard` only when its template or a deliberately local-owned fork:
 
 ## Consequences
 
-- Agent Workflows does not exactly mirror the upstream promoted set.
+- Cara does not exactly mirror the upstream promoted set.
 - `/wizard` remains unavailable until its mutation boundary is evidence-backed.
 - The blocked inventory makes this exception visible and prevents stale installations across machines.

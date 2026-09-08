@@ -1,10 +1,10 @@
-# Agent Workflows
+# Cara
 
-Agent Workflows provides reusable personal automation for agent-assisted software projects. It keeps global skills reusable while making each repository's local workflow conventions explicit.
+Cara provides reusable personal automation for agent-assisted software projects. It keeps global skills reusable while making each repository's local workflow conventions explicit.
 
 ## Language
 
-**Agent Workflows**:
+**Cara**:
 The public repository that stores reusable personal agent workflow tooling.
 _Avoid_: Dotfiles, one-off scripts
 
@@ -33,23 +33,23 @@ The committed `docs/agents/*` files that map global skills and Ralph to one repo
 _Avoid_: Backlog, ticket mirror
 
 **Local Symlink**:
-An untracked entrypoint such as `./ralph.sh` or `.ralph/ralph.sh` pointing from a target repository to shared tooling in Agent Workflows.
+An untracked entrypoint such as `./ralph.sh` or `.ralph/ralph.sh` pointing from a target repository to shared tooling in Cara.
 _Avoid_: Installed copy, checked-in runner
 
 **Shared Skill**:
-A reusable skill stored in Agent Workflows and installed into the global agent skills directory by symlink.
+A reusable skill stored in Cara and installed into an agent skills directory by symlink.
 _Avoid_: Repo-local skill, copied skill
 
 **Upstream Skill**:
-A reusable skill owned by an external skill source, especially Matt Pocock's skills, and installed globally from that source rather than mirrored in Agent Workflows.
+A reusable skill owned by an external skill source, especially Matt Pocock's skills, and installed globally from that source rather than mirrored in Cara.
 _Avoid_: Shared skill, local fork
 
 **Local-Owned Skill**:
-A skill whose behavior is materially customized for Zain's workflows and whose source of truth is Agent Workflows.
+A skill whose behavior is materially customized for Zain's workflows and whose source of truth is Cara.
 _Avoid_: Upstream skill, vendored copy
 
 **Upstream-Tracked Skill**:
-A skill that may be installed or updated from its upstream source because Agent Workflows does not own local behavior for it.
+A skill that may be installed or updated from its upstream source because Cara does not own local behavior for it.
 _Avoid_: Local-owned skill, fork
 
 **Teaching Workspace Assets**:
@@ -61,7 +61,7 @@ The per-workspace instructions that tell `teach` how static lessons and referenc
 _Avoid_: Teach skill hosting, hardcoded Tailscale hosting
 
 **Local Teach Delta**:
-The explicitly documented behavior that Agent Workflows adds to the upstream `teach` skill and must preserve during upstream comparisons.
+The explicitly documented behavior that Cara adds to the upstream `teach` skill and must preserve during upstream comparisons.
 _Avoid_: Fork drift, accidental changes
 
 **Private Review**:
@@ -74,16 +74,16 @@ _Avoid_: Private review
 
 ## Relationships
 
-- **Agent Workflows** provides **Ralph** and onboarding tooling.
+- **Cara** provides **Ralph** and onboarding tooling.
 - **Ralph** consumes the **Ready Queue**.
 - **Triage State** is represented by labels on GitHub issues.
 - **Delivery Status** is represented by GitHub Project `Status` only when a Project is configured.
 - **Repo-Local Agent Docs** adapt global skills and **Ralph** to a specific repository.
 - **Local Symlinks** provide convenient entrypoints without committing shared runner copies into application repositories.
 - A **Shared Skill** may be installed globally by symlink, while project-specific skill behavior should remain in repo-local skills.
-- **Upstream Skills** are installed from their upstream source; only materially customized skills become **Local-Owned Skills** in Agent Workflows.
+- **Upstream Skills** are installed from their upstream source; only materially customized skills become **Local-Owned Skills** in Cara.
 - **Upstream-Tracked Skills** may accept upstream breaking changes, including renames and removal of deprecated skills.
-- The upstream grilling stack (`grilling`, `domain-modeling`, and `grill-with-docs`) remains **Upstream-Tracked** unless Agent Workflows needs concrete customized behavior.
+- The upstream grilling stack (`grilling`, `domain-modeling`, and `grill-with-docs`) remains **Upstream-Tracked** unless Cara needs concrete customized behavior.
 - Local-owned `teach` workspaces use **Teaching Workspace Assets** as the default lesson architecture while preserving local codebase source-linking behavior and deferring publication details to **Teaching Workspace Hosting**.
 - The **Local Teach Delta** is the preservation checklist for local-owned `teach`; upstream comparisons may add accepted upstream behavior, but must not erase the delta.
 - **Private Review** skills protect pending review artifacts.

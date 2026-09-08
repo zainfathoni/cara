@@ -13,7 +13,7 @@ Amp exposes a different non-interactive automation interface. Its one-shot execu
 
 Because of that command-line mismatch, Tycho cannot currently run Amp by setting a custom harness `execution_command` directly to `amp`.
 
-This decision is deliberately scoped to a temporary local workaround for Tycho and Amp. It is not a general third-party harness strategy for Agent Workflows, and it does not make Amp a first-class Ralph runner.
+This decision is deliberately scoped to a temporary local workaround for Tycho and Amp. It is not a general third-party harness strategy for Cara, and it does not make Amp a first-class Ralph runner.
 
 ## Decision
 
@@ -88,7 +88,7 @@ projects:
 
 ### Negative
 
-- The integration is not native Amp support and should not be promoted as reusable Agent Workflows infrastructure.
+- The integration is not native Amp support and should not be promoted as reusable Cara infrastructure.
 - Claude-specific Tycho flags must be translated or dropped by the shim.
 - Tycho session ids do not map to Amp threads. Amp resumes conversations through `amp threads continue`, so this workaround should not be treated as native resume support.
 - The shim may need updates if Tycho changes the Claude adapter argv contract or Amp changes its automation flags.

@@ -106,7 +106,7 @@ elif [ -e ralph.sh ] || [ -e PROMPT.md ] || git ls-files --error-unmatch ralph.s
   ENTRYPOINT_MODE=.ralph
 fi
 
-printf 'Agent Workflows onboarding plan\n'
+printf 'Cara onboarding plan\n'
 printf 'Workspace: %s\n' "$WORKSPACE"
 printf 'Repository: %s\n' "$REPO"
 printf 'Default branch: %s\n' "$DEFAULT_BRANCH"
@@ -236,4 +236,4 @@ else
   add_exclude /.ralph/
 fi
 
-printf 'Agent Workflows setup complete. Review and commit docs/agents plus %s changes if desired.\n' "$AGENT_FILES_DISPLAY"
+printf 'Cara setup complete. Review and commit docs/agents plus %s changes if desired.\n' "$AGENT_FILES_DISPLAY"

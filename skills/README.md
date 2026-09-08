@@ -1,6 +1,6 @@
-# Shared Skills
+# Cara Skills
 
-Reusable personal skills that should be available across projects.
+Cara owns these skill sources even when a skill is installed only for one project.
 
 ## Workflow Skills
 
@@ -59,10 +59,10 @@ Reference: [Skills Changelog v1.2: /wait-what, /writing-for-agents, Claude Code 
 
 ## Install
 
-After cloning this repo, bootstrap the `/sync-skills` skill once:
+After cloning this repo, bootstrap the default global selection once:
 
 ```bash
-~/Code/GitHub/zainfathoni/agent-workflows/skills/install.sh
+~/Code/GitHub/zainfathoni/cara/skills/install.sh
 ```
 
 Then invoke `/sync-skills` for all future updates and audits. It fast-forwards this repository, runs both scripts below, cleans up deprecated skills, and verifies the installation.
@@ -70,21 +70,36 @@ Then invoke `/sync-skills` for all future updates and audits. It fast-forwards t
 For manual control or troubleshooting, the underlying scripts are:
 
 ```bash
-~/Code/GitHub/zainfathoni/agent-workflows/skills/update-upstream.sh
-~/Code/GitHub/zainfathoni/agent-workflows/skills/install.sh
+~/Code/GitHub/zainfathoni/cara/skills/update-upstream.sh
+~/Code/GitHub/zainfathoni/cara/skills/install.sh
 ```
 
 `update-upstream.sh` uses explicit allowlists for Matt Pocock's skills, `shadcn/improve`, and `firewalker06/tycho`, and intentionally excludes local-owned `teach`. Matt's package is pinned to the audited v1.2.3 tag. The script removes deprecated and blocked skills before installing, validates copied context pointers and Claude/Codex invocation metadata, and verifies lock provenance. By default it copies skills for `amp`, `claude-code`, and `codex`; Amp and Codex share the Agent Skills root used by the Skills CLI. Override the agent set with a whitespace-separated subset, such as `UPSTREAM_SKILLS_AGENTS="amp claude-code"`; other agent IDs are rejected.
 
 The copied multi-agent installation remains authoritative. Do not install Matt's Claude Code plugin alongside it; that creates a second update path for the same skills.
 
-`install.sh` symlinks all local-owned shared skills. The default target is `~/.agents/skills`. Override it with `AGENT_SKILLS_DIR`:
+`install.sh` symlinks a deliberately small default global selection: the six
+review skills, `pr-e2e-evidence`, `fizzy`, `log-notes`, and `sync-skills`.
+
+The BTA-only selection is `checking-bta-dev-health`, `creating-bta-worktrees`,
+`creating-bta-prs`, `daily-standup`, and `release`. Install it into a
+project-owned discovery root by passing those five names explicitly.
+
+Occasional workflows such as `hey-cli-second-identity`, `show-me`,
+`squash-commits`, and `teach` are optional. Install any explicit selection by
+passing its names; no profile or alias layer is involved. For example:
 
 ```bash
-AGENT_SKILLS_DIR=~/.claude/skills ~/Code/GitHub/zainfathoni/agent-workflows/skills/install.sh
+AGENT_SKILLS_DIR=/path/to/project/.agents/skills \
+  ~/Code/GitHub/zainfathoni/cara/skills/install.sh \
+  checking-bta-dev-health creating-bta-worktrees creating-bta-prs daily-standup release
 ```
 
-The installer refuses to overwrite a real directory or file. If a target path already exists as a symlink, it is replaced.
+The default target remains `~/.agents/skills`; override it with
+`AGENT_SKILLS_DIR`. Use `install.sh --list` to inspect the default selection
+without changing anything. The installer touches only selected names, refuses
+to overwrite a real directory or file, and replaces an existing symlink only
+for a selected name. Foreign-owned and deselected entries are left alone.
 
 Shell scripts under `skills/` are covered by destructive-command scanning. If you add or change a script, run `dcg scan --paths skills/ --fail-on error` when `dcg` is installed; CI also scans scripts and workflows. Prefer installing `dcg` through machine configuration rather than an ad-hoc local installer when the machine is managed declaratively.
 

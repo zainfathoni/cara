@@ -1,6 +1,6 @@
 ---
 name: show-me
-description: Help the user understand the current topic visually with concise diagrams, code-shape sketches, and focused HTML artifacts.
+description: Creates visual explanations with concise diagrams, code-shape sketches, and focused HTML artifacts. Use when the user explicitly asks to “show me,” requests a diagram, or wants a visual walkthrough.
 ---
 
 Help the user understand the current topic of conversation visually. Skip the preamble and keep prose brief. Pick the smallest view that makes the key point clear.

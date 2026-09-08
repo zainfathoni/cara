@@ -1,6 +1,6 @@
-# Agent Workflows
+# Cara
 
-Reusable personal agent workflow tooling for repositories that use globally installed agent skills and GitHub Issues.
+My ways of working with coding agents.
 
 ## What This Provides
 
@@ -33,19 +33,19 @@ Reference: [Skills Changelog v1.2: /wait-what, /writing-for-agents, Claude Code 
 From the target repository:
 
 ```bash
-~/Code/GitHub/zainfathoni/agent-workflows/ralph/init.sh
+~/Code/GitHub/zainfathoni/cara/ralph/init.sh
 ```
 
 To apply without the interactive confirmation:
 
 ```bash
-~/Code/GitHub/zainfathoni/agent-workflows/ralph/init.sh --yes
+~/Code/GitHub/zainfathoni/cara/ralph/init.sh --yes
 ```
 
 If the repository uses a GitHub Project dashboard, pass it explicitly:
 
 ```bash
-~/Code/GitHub/zainfathoni/agent-workflows/ralph/init.sh --project-owner zainfathoni --project-number 6
+~/Code/GitHub/zainfathoni/cara/ralph/init.sh --project-owner zainfathoni --project-number 6
 ```
 
 The init script creates or updates repo-local `docs/agents/*`, creates missing canonical labels, and creates local-only Ralph symlinks ignored through `.git/info/exclude`.
@@ -81,14 +81,14 @@ RALPH_ISSUE=168 ./ralph.sh 1
 Markdown `Blocked by: #123` lines are documentation only. GitHub's real issue dependency graph is the canonical blocker source. Use the helper to audit or repair repositories where markdown blockers may not have matching GitHub relationships:
 
 ```bash
-~/Code/GitHub/zainfathoni/agent-workflows/ralph/github-blockers.sh audit --repo OWNER/REPO --state all
-~/Code/GitHub/zainfathoni/agent-workflows/ralph/github-blockers.sh sync --repo OWNER/REPO --state all
+~/Code/GitHub/zainfathoni/cara/ralph/github-blockers.sh audit --repo OWNER/REPO --state all
+~/Code/GitHub/zainfathoni/cara/ralph/github-blockers.sh sync --repo OWNER/REPO --state all
 ```
 
 Before Ralph claims work, it must verify the selected issue has no open real blockers:
 
 ```bash
-~/Code/GitHub/zainfathoni/agent-workflows/ralph/github-blockers.sh check-issue --repo OWNER/REPO --issue 168
+~/Code/GitHub/zainfathoni/cara/ralph/github-blockers.sh check-issue --repo OWNER/REPO --issue 168
 ```
 
 ## Environment
@@ -126,7 +126,7 @@ These files adapt the global skills and shared Ralph runner to the local reposit
 After cloning this repo, bootstrap the `/sync-skills` skill once:
 
 ```bash
-~/Code/GitHub/zainfathoni/agent-workflows/skills/install.sh
+~/Code/GitHub/zainfathoni/cara/skills/install.sh
 ```
 
 Then invoke `/sync-skills` for all future updates and audits. It fast-forwards this repository, runs both scripts below, cleans up deprecated skills, and verifies the installation.
@@ -134,13 +134,16 @@ Then invoke `/sync-skills` for all future updates and audits. It fast-forwards t
 For manual control or troubleshooting, the underlying scripts are:
 
 ```bash
-~/Code/GitHub/zainfathoni/agent-workflows/skills/update-upstream.sh
-~/Code/GitHub/zainfathoni/agent-workflows/skills/install.sh
+~/Code/GitHub/zainfathoni/cara/skills/update-upstream.sh
+~/Code/GitHub/zainfathoni/cara/skills/install.sh
 ```
 
 `skills/update-upstream.sh` installs a release-pinned allowlist of upstream-tracked skills, including `shadcn/improve`, and intentionally excludes local-owned `teach`, so pulling this repo does not depend on a human remembering which upstream skills are safe to update. Upstream `wizard` remains blocked pending local file/repository mutation hardening.
 
-By default this symlinks shared skills into `~/.agents/skills`. Set `AGENT_SKILLS_DIR` to install somewhere else.
+By default this symlinks the small global selection documented in
+[`skills/README.md`](skills/README.md) into `~/.agents/skills`. Pass skill names
+to install an explicit project-local or optional selection, and set
+`AGENT_SKILLS_DIR` to install somewhere else.
 
 Upstream skills are installed for Amp, Claude Code, and Codex by default. Set `UPSTREAM_SKILLS_AGENTS` to a space-separated subset when a machine needs fewer targets.
 

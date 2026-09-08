@@ -1,6 +1,6 @@
 ---
 name: sync-skills
-description: Synchronize and verify global skill installations across machines.
+description: Synchronizes and verifies Cara-owned and upstream skill installations. Use when explicitly asked to install, update, or audit agent skills across machines.
 disable-model-invocation: true
 ---
 
@@ -10,10 +10,10 @@ Follow this process in order. Treat the repository scripts as authoritative when
 
 ## 1. Locate and validate the repository
 
-Resolve the agent-workflows root in this order:
+Resolve the Cara root in this order:
 
-1. `$AGENT_WORKFLOWS_ROOT`, when set.
-2. `~/Code/GitHub/zainfathoni/agent-workflows`.
+1. `$CARA_ROOT`, when set.
+2. `~/Code/GitHub/zainfathoni/cara`.
 3. A path supplied by the user.
 
 Require readable executable files at `skills/update-upstream.sh` and `skills/install.sh`. If this skill is not installed yet on a new machine, follow [`BOOTSTRAP.md`](BOOTSTRAP.md).
@@ -68,10 +68,10 @@ Allow the script to replace symlinks. If it refuses a real directory, preserve t
 Derive expectations fresh from `update-upstream.sh`, `install.sh`, and the repository filesystem; never copy their inventories into this skill.
 
 1. Extract every active upstream, separately sourced, deprecated, and blocked skill from the script's arrays, plus configured agent destinations, package provenance, required installed files, and lock-file assertions from its executable checks.
-2. Derive local skills by enumerating each immediate `skills/*/` directory containing `SKILL.md`, exactly as the installer does.
+2. Derive the selected local skills by running `skills/install.sh --list`; do not infer that every Cara-owned source should be globally installed.
 3. At every destination where the scripts install upstream skills, verify each expected skill exists and resolves to a directory containing `SKILL.md`. Require each validation helper and required reference encoded by the upstream script to pass, including relative context pointers, Codex sidecars, invocation parity, and lock assertions.
 4. Check every deprecated and blocked name across the canonical upstream root, local root, every configured agent root, and the explicit fallback roots used by the script. Count broken symlinks as present discrepancies.
-5. In the local root, verify every derived local skill is a symlink, is not broken, and its fully resolved target equals that skill's canonical repository directory. Enumerate the root to report extra skill symlinks, wrong targets, missing links, broken links, and real directories occupying expected names.
+5. In the local root, verify every selected local skill is a symlink, is not broken, and its fully resolved target equals that skill's canonical repository directory. Enumerate the root to report extra skill symlinks, wrong targets, missing links, broken links, and real directories occupying expected names. Treat unselected entries as preserved inventory, not discrepancies, unless they are broken Cara-owned links left by a migration.
 
 **Complete when:** every derived item has an explicit expected-versus-actual result, every relevant root has been enumerated (including overlapping roots), all symlink targets have been resolved, and no check was skipped.
 

@@ -30,7 +30,7 @@ Fresh work must satisfy all of these rules:
 If a GitHub Project item is labeled `ready-for-agent` but still has a stale/custom queue status such as `Ready` or `Backlog`, Ralph should repair that dashboard drift to `Status: Todo` before selecting work, as long as the issue is open, unassigned, and has no open linked PR. Prefer the shared helper when available:
 
 ```bash
-~/Code/GitHub/zainfathoni/agent-workflows/ralph/project-status-repair.sh --repo {{REPO}} --project-owner {{PROJECT_OWNER}} --project-number {{PROJECT_NUMBER}}
+~/Code/GitHub/zainfathoni/cara/ralph/project-status-repair.sh --repo {{REPO}} --project-owner {{PROJECT_OWNER}} --project-number {{PROJECT_NUMBER}}
 ```
 
 ## Blockers
@@ -40,7 +40,7 @@ GitHub's issue dependency graph is the canonical source for issue-to-issue block
 Before claiming an issue, Ralph must verify that the issue has no open GitHub `blockedBy` dependencies:
 
 ```bash
-~/Code/GitHub/zainfathoni/agent-workflows/ralph/github-blockers.sh check-issue --repo {{REPO}} --issue <number>
+~/Code/GitHub/zainfathoni/cara/ralph/github-blockers.sh check-issue --repo {{REPO}} --issue <number>
 ```
 
 If the check reports an open blocker, Ralph must not claim the issue. If the issue is labeled `ready-for-agent`, use the Not Actually Ready flow and mention the open blocker. Closed blocker relationships may remain linked and do not prevent execution.
@@ -48,7 +48,7 @@ If the check reports an open blocker, Ralph must not claim the issue. If the iss
 Maintainers can reconcile markdown blocker notes into real GitHub dependency edges with:
 
 ```bash
-~/Code/GitHub/zainfathoni/agent-workflows/ralph/github-blockers.sh sync --repo {{REPO}} --state all
+~/Code/GitHub/zainfathoni/cara/ralph/github-blockers.sh sync --repo {{REPO}} --state all
 ```
 
 ## PR Handoff

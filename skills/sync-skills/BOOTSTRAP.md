@@ -1,6 +1,6 @@
 # Bootstrap Sync Skills
 
-On a machine where `/sync-skills` is not installed yet, locate the agent-workflows repository in the same order used by `SKILL.md`, validate that `skills/install.sh` is executable, and run:
+On a machine where `/sync-skills` is not installed yet, locate the Cara repository in the same order used by `SKILL.md`, validate that `skills/install.sh` is executable, and run:
 
 ```bash
 "<ROOT>/skills/install.sh"
