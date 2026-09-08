@@ -20,6 +20,6 @@ The skills speak in canonical triage roles. This file maps those roles to the ac
 | `ready-for-human` | `ready-for-human` | Requires human implementation or review |
 | `wontfix` | `wontfix` | Will not be actioned |
 
-Every triaged issue should have exactly one category role and exactly one triage-state role. `ready-for-agent-triage` is not Ralph execution eligibility unless this repository explicitly maps it to the same label as `ready-for-agent`.
+Every triaged issue should have exactly one category role and exactly one triage-state role. `ready-for-agent-triage` is a planning queue state and is distinct from the implementation-ready `ready-for-agent` state unless this repository explicitly maps both roles to one label.
 
 When a skill mentions a role, use the corresponding label string from this table. If this repository already has equivalent labels with different names, edit the right-hand column instead of creating duplicates.

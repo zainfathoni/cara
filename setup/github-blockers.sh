@@ -33,7 +33,7 @@ if [ "$COMMAND" = "-h" ] || [ "$COMMAND" = "--help" ]; then
   usage
   exit 0
 fi
-REPO=${RALPH_REPO:-}
+REPO=
 STATE=all
 ISSUE=
 
@@ -64,7 +64,7 @@ while [ "$#" -gt 0 ]; do
 done
 
 if [ -z "$REPO" ]; then
-  printf 'Missing --repo OWNER/REPO or RALPH_REPO.\n' >&2
+  printf 'Missing --repo OWNER/REPO.\n' >&2
   exit 2
 fi
 

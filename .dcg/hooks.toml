@@ -6,6 +6,7 @@ truncate = 200
 
 [scan.paths]
 include = [
+  "setup/**/*.sh",
   "skills/**/*.sh",
   ".github/workflows/**",
 ]

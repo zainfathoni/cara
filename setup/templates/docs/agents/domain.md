@@ -1,6 +1,6 @@
 # Domain Docs
 
-How engineering skills should consume this repo's domain documentation when exploring the codebase.
+How engineering skills should consume a repository's domain documentation when exploring its codebase.
 
 ## Before Exploring, Read These
 

@@ -19,8 +19,8 @@ GitHub Issues are the source of truth for work. Do not create repo-local ticket 
 GitHub's issue dependency graph is the canonical source for issue-to-issue blockers. A markdown `Blocked by:` line is useful documentation, but it must be kept in sync with a real GitHub `blockedBy` relationship. Use the shared helper to audit or repair blocker relationships:
 
 ```bash
-~/Code/GitHub/zainfathoni/cara/ralph/github-blockers.sh audit --repo {{REPO}} --state all
-~/Code/GitHub/zainfathoni/cara/ralph/github-blockers.sh sync --repo {{REPO}} --state all
+~/Code/GitHub/zainfathoni/cara/setup/github-blockers.sh audit --repo {{REPO}} --state all
+~/Code/GitHub/zainfathoni/cara/setup/github-blockers.sh sync --repo {{REPO}} --state all
 ```
 
 ## Skill Publishing

@@ -19,4 +19,4 @@ jobs:
             | bash -s -- --version v0.5.7 --dest "$HOME/.local/bin" --no-configure --verify
       - name: Scan scripts and workflows
         run: |
-          "$HOME/.local/bin/dcg" scan --paths skills/ .github/workflows/ --fail-on error
+          "$HOME/.local/bin/dcg" scan --paths setup/ skills/ .github/workflows/ --fail-on error

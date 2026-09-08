@@ -8,18 +8,6 @@ Cara provides reusable personal automation for agent-assisted software projects.
 The public repository that stores reusable personal agent workflow tooling.
 _Avoid_: Dotfiles, one-off scripts
 
-**Ralph**:
-The execution-only runner that consumes issues already marked `ready-for-agent`.
-_Avoid_: Triage bot, planner
-
-**Ready Queue**:
-The set of open GitHub issues that satisfy the Agent Queue rules, especially the `ready-for-agent` triage label.
-_Avoid_: Backlog, todo list
-
-**Agent Queue**:
-The workflow lane for AFK-ready implementation issues.
-_Avoid_: Needs Attention, Human Queue
-
 **Triage State**:
 The readiness state represented by labels such as `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, and `wontfix`.
 _Avoid_: Project status
@@ -29,12 +17,8 @@ The optional GitHub Project `Status` field that represents delivery progress: `T
 _Avoid_: Triage state
 
 **Repo-Local Agent Docs**:
-The committed `docs/agents/*` files that map global skills and Ralph to one repository's issue tracker, labels, domain docs, and execution rules.
+The committed `docs/agents/*` files that map global skills to one repository's issue tracker, labels, and domain docs.
 _Avoid_: Backlog, ticket mirror
-
-**Local Symlink**:
-An untracked entrypoint such as `./ralph.sh` or `.ralph/ralph.sh` pointing from a target repository to shared tooling in Cara.
-_Avoid_: Installed copy, checked-in runner
 
 **Shared Skill**:
 A reusable skill stored in Cara and installed into an agent skills directory by symlink.
@@ -74,12 +58,10 @@ _Avoid_: Private review
 
 ## Relationships
 
-- **Cara** provides **Ralph** and onboarding tooling.
-- **Ralph** consumes the **Ready Queue**.
+- **Cara** provides reusable skills and repository setup tooling.
 - **Triage State** is represented by labels on GitHub issues.
 - **Delivery Status** is represented by GitHub Project `Status` only when a Project is configured.
-- **Repo-Local Agent Docs** adapt global skills and **Ralph** to a specific repository.
-- **Local Symlinks** provide convenient entrypoints without committing shared runner copies into application repositories.
+- **Repo-Local Agent Docs** adapt global skills to a specific repository.
 - A **Shared Skill** may be installed globally by symlink, while project-specific skill behavior should remain in repo-local skills.
 - **Upstream Skills** are installed from their upstream source; only materially customized skills become **Local-Owned Skills** in Cara.
 - **Upstream-Tracked Skills** may accept upstream breaking changes, including renames and removal of deprecated skills.
@@ -92,7 +74,6 @@ _Avoid_: Private review
 ## Flagged Ambiguities
 
 - **Status** can mean triage state or delivery status. Use **Triage State** for labels and **Delivery Status** for GitHub Project `Status`.
-- **Ralph** is not a planning or triage mechanism. Planning and triage are manually triggered through skills.
 - **Repo-Local Agent Docs** are not a second source of truth for work. GitHub Issues remain the work source of truth.
 - **Shared Skill** does not mean every globally installed skill. Use **Upstream Skill** for skills owned elsewhere and **Local-Owned Skill** for customized skills maintained here.
 - **Teaching Workspace Assets** are created inside each teaching workspace; they are not files bundled in Matt Pocock's upstream `teach` skill package.

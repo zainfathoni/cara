@@ -15,7 +15,3 @@ Use `/wayfinder` for large planning tasks that exceed one agent session — it c
 ### Domain docs
 
 Domain documentation and ADR lookup rules are described in `docs/agents/domain.md`.
-
-### Ralph
-
-Ralph is execution-only and consumes `ready-for-agent` issues. Ralph must not automatically run planning skills such as `/prototype`, `/handoff`, `/to-spec`, `/to-tickets`, `/wayfinder`, or `/triage`. See `docs/agents/ralph.md`.

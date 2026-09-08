@@ -13,7 +13,7 @@ Amp exposes a different non-interactive automation interface. Its one-shot execu
 
 Because of that command-line mismatch, Tycho cannot currently run Amp by setting a custom harness `execution_command` directly to `amp`.
 
-This decision is deliberately scoped to a temporary local workaround for Tycho and Amp. It is not a general third-party harness strategy for Cara, and it does not make Amp a first-class Ralph runner.
+This decision is deliberately scoped to a temporary local workaround for Tycho and Amp. It is not a general third-party harness strategy for Cara.
 
 ## Decision
 

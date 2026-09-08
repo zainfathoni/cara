@@ -1,9 +1,13 @@
 ---
 id: "001"
 title: Keep Ralph Execution-Only and Reusable Across Repositories
-status: accepted
+status: superseded
 date: 2026-05-02
 ---
+
+Superseded on 2026-09-08 when the unused Ralph runner, prompt, status repair,
+templates, and generated entrypoints were retired. The generic issue-tracker,
+triage-label, domain-doc, and GitHub dependency setup moved to `setup/`.
 
 ## Context
 

@@ -101,7 +101,7 @@ without changing anything. The installer touches only selected names, refuses
 to overwrite a real directory or file, and replaces an existing symlink only
 for a selected name. Foreign-owned and deselected entries are left alone.
 
-Shell scripts under `skills/` are covered by destructive-command scanning. If you add or change a script, run `dcg scan --paths skills/ --fail-on error` when `dcg` is installed; CI also scans scripts and workflows. Prefer installing `dcg` through machine configuration rather than an ad-hoc local installer when the machine is managed declaratively.
+Shell scripts under `setup/` and `skills/` are covered by destructive-command scanning. If you add or change a script, run `dcg scan --paths setup/ skills/ --fail-on error` when `dcg` is installed; CI also scans scripts and workflows. Prefer installing `dcg` through machine configuration rather than an ad-hoc local installer when the machine is managed declaratively.
 
 ## Review Skills
 
