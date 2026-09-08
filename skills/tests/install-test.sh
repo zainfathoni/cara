@@ -64,4 +64,15 @@ if AGENT_SKILLS_DIR="$occupied_root" "$INSTALLER" fizzy >/dev/null 2>&1; then
 fi
 [ -d "$occupied_root/fizzy" ] || fail "real target directory was removed"
 
+traversal_root="$TMP_ROOT/custom"
+traversal_sibling="$TMP_ROOT/skills"
+traversal_source="$TMP_ROOT/traversal-source"
+mkdir -p "$traversal_root" "$traversal_sibling" "$traversal_source"
+ln -s "$traversal_source" "$traversal_sibling/fizzy"
+if AGENT_SKILLS_DIR="$traversal_root" "$INSTALLER" ../skills/fizzy >/dev/null 2>&1; then
+  fail "path-shaped skill selection was accepted"
+fi
+[ "$(readlink "$traversal_sibling/fizzy")" = "$traversal_source" ] ||
+  fail "path-shaped selection changed a target outside the install root"
+
 printf 'PASS: default, explicit, foreign-owned, unknown, and occupied-target installation cases\n'

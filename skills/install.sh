@@ -52,6 +52,13 @@ fi
 
 validated_skills=()
 for skill_name in "${selected_skills[@]}"; do
+  case "$skill_name" in
+    ''|.|..|*/*)
+      printf 'Skill selection must be a single directory name: %s\n' "$skill_name" >&2
+      exit 1
+      ;;
+  esac
+
   for previous_skill in ${validated_skills[@]+"${validated_skills[@]}"}; do
     if [ "$skill_name" = "$previous_skill" ]; then
       printf 'Duplicate skill selection: %s\n' "$skill_name" >&2
