@@ -37,7 +37,7 @@ Preserve local changes and divergent history. If either is present, stop mutatio
 
 Read both scripts from the updated checkout before running them. Resolve their paths using the current environment, including `HOME`, `AGENT_SKILLS_DIR`, `UPSTREAM_SKILLS_AGENTS`, `XDG_CONFIG_HOME`, `CLAUDE_CONFIG_DIR`, `CODEX_HOME`, and `XDG_STATE_HOME`. Distinguish the canonical upstream root, every configured agent destination, the local install root, and the global lock file. Preserve script defaults when overrides are absent.
 
-**Complete when:** every destination and lock path used by this run is listed as an absolute path and every configured agent is accepted by the upstream script.
+**Complete when:** every destination, discovery root, and lock path used by this run is listed as an absolute path and every configured agent is accepted by the upstream script.
 
 ## 4. Update upstream skills
 
@@ -47,7 +47,7 @@ Run, without changing its environment or logic:
 "<ROOT>/skills/update-upstream.sh"
 ```
 
-The script's own order is binding: deprecated/blocked cleanup, release-pinned upstream package install, invocation/pointer/provenance checks, then separately sourced installs and their checks.
+The script's own order is binding: read-only ownership audit, deprecated/blocked cleanup, release-pinned upstream package install, invocation/pointer/provenance checks, then separately sourced installs and their checks. Preserve every path reported by the ownership audit. A competing copy or broken/different-target link stops mutation until the owner chooses which installation to retain; an exact alias is accepted, and a retired overlap is a non-blocking ownership warning.
 
 **Complete when:** the script exits zero and none of its checks report an error. A nonzero exit is a discrepancy; continue only with read-only verification so the final report captures the full state.
 

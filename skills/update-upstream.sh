@@ -225,6 +225,10 @@ for agent in "${upstream_agents[@]}"; do
   agent_skill_root "$agent" >/dev/null
 done
 
+# Refuse to mutate installations while another discovery root can shadow the
+# release-pinned copy. The audit reports but never removes foreign-owned files.
+"$SCRIPT_DIR/audit-skill-ownership.sh" "$CANONICAL_UPSTREAM_ROOT" "${UPSTREAM_SKILLS[@]}"
+
 remove_deprecated() {
   local skill="$1"
   local target
