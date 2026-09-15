@@ -9,6 +9,7 @@ Cara owns these skill sources even when a skill is installed only for one projec
 - `log-notes` - log completed agent work into iCloud-synced Obsidian daily notes and relevant topical/project notes.
 - `squash-commits` - prepare a chronological rebase guide and, when explicitly authorized, execute and verify the guided squash.
 - `pr-e2e-evidence` - collect repo-agnostic PR QA evidence: E2E results, browser verification notes, report screenshots, before/after screenshots, and PR description updates.
+- `managing-dev-environments` - prepare, inspect, and release development runtimes and task-owned browser sessions. Complements `pr-e2e-evidence`; release means teardown, not deployment. Concrete commands and environment permissions remain repo-owned.
 - `creating-bta-worktrees` - create and repair BookThatApp sibling worktrees with matching local branches, shared symlinks, and Docker-safe runtime files.
 - `creating-bta-prs` - rename BookThatApp issue worktree branches to existing BTA conventions, commit and push focused changes, and create GitHub PRs from the repo template.
 - `show-me` - render topic-oriented visuals as diagrams, pseudocode, file trees, and focused HTML artifacts.
@@ -79,7 +80,8 @@ For manual control or troubleshooting, the underlying scripts are:
 The copied multi-agent installation remains authoritative. Do not install Matt's Claude Code plugin alongside it; that creates a second update path for the same skills.
 
 `install.sh` symlinks a deliberately small default global selection: the six
-review skills, `pr-e2e-evidence`, `fizzy`, `log-notes`, and `sync-skills`.
+review skills, `pr-e2e-evidence`, `managing-dev-environments`, `fizzy`,
+`log-notes`, and `sync-skills`.
 
 The BTA-only selection is `checking-bta-dev-health`, `creating-bta-worktrees`,
 `creating-bta-prs`, `daily-standup`, and `release`. Install it into a

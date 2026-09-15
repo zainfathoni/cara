@@ -11,6 +11,7 @@ TARGET_ROOT=${AGENT_SKILLS_DIR:-$HOME/.agents/skills}
 DEFAULT_SKILLS=(
   fizzy
   log-notes
+  managing-dev-environments
   pr-e2e-evidence
   review-address
   review-clear

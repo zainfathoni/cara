@@ -37,6 +37,8 @@ gh pr list --head "$(git branch --show-current)" --json number,title,url,state
 
 If no PR exists and PR creation is in scope, create one while preserving the template. Ask one narrow question when the relevant environment or browser surface remains ambiguous after discovery.
 
+When using a development runtime, load `/managing-dev-environments` for ownership checks, setup, and source readiness before capture. Repository docs own the concrete lifecycle commands and environment permissions.
+
 **Complete when:** the PR target, template placement, environment, exact browser surface, access context, and required deployment follow-up are known.
 
 ### 2. Define the proof
@@ -91,6 +93,8 @@ Update the local draft while it remains active. Before merge, replace pending bo
 
 Remove temporary browser helpers and recording overlays. Remove or leave uncommitted the `docs/tests/` draft and generated media unless the user requested a commit or the repository requires durable evidence. Retain raw local video only until upload and playback are confirmed.
 
+Use `/managing-dev-environments` when dev-runtime or browser-session release is requested. Evidence completion alone does not authorize shared-stack shutdown. Account separately for host-side servers and report resources deliberately left running.
+
 Report the PR URL, environments verified, scenarios and verdicts, evidence location, deployment status, limitations, and cleanup state.
 
-**Complete when:** temporary processes and helpers are stopped, the worktree contains only intended durable files, published evidence is still accessible, and the owner has a concise verification summary.
+**Complete when:** task-owned evidence helpers are stopped, runtime/browser resources are released as authorized or explicitly retained, the worktree contains only intended durable files, published evidence is still accessible, and the owner has a concise verification summary.
