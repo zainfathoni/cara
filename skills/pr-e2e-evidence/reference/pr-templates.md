@@ -26,7 +26,7 @@ Environment:
 
 | User-visible change | Evidence | Status |
 | --- | --- | --- |
-| `<behavior, including changed error/loading/empty/a11y states>` | `<screenshot, recording, DOM assertion, human listening, or blocker>` | `<passed, pending, or blocked>` |
+| `<behavior, including changed error/loading/empty/a11y states>` | `<executed result and screenshot/recording/assertion/listening reference, or pending/blocker reason>` | `<passed, pending, or blocked>` |
 
 ## Evidence
 
@@ -53,12 +53,18 @@ Place this near the repository's QA, validation, or checklist section without re
 ## E2E evidence
 
 <details>
-<summary>Development browser verification</summary>
+<summary>Development — <scenario> — <passed | pending | blocked></summary>
 
-Passed in development.
+Verdict: `<passed with a scenario-scoped result | pending or blocked with a reason>`
 
-Result:
-- `<verified behavior>`
+Relevant client configuration:
+- `<browser engine/version, viewport, and screen reader when needed>`
+
+Changed-behavior coverage:
+
+| User-visible change | Executed result and evidence reference | Status |
+| --- | --- | --- |
+| `<changed behavior>` | `<observed result plus attachment link, DOM assertion output, or human-listening result; use the reason when not executed>` | `<passed, pending, or blocked>` |
 
 Reproduction context:
 - Route/surface: `<route and exact surface>`
@@ -67,16 +73,15 @@ Reproduction context:
 Console/network notes:
 - `<notable warnings or none>`
 
-Screenshots:
-- `<scenario label>`
-  <GitHub-hosted attachment markup>
+Evidence:
+- `<scenario-scoped screenshot, recording, assertion, or listening result and reviewer-safe reference>`
 
 </details>
 
 <details>
-<summary>Staging browser verification</summary>
+<summary>Staging — <scenario> — pending</summary>
 
-Pending staging deployment.
+Verdict: `Pending staging deployment: <reason>`
 
 </details>
 ````
@@ -90,4 +95,4 @@ Use product-environment language in published evidence, not execution-infrastruc
 - Bad: `Full-widget Orb Chromium verification at /home/user/...`
 - Bad: `Production verification` when the scenario used a local fixture that renders a production component.
 
-Do not publish agent or runner identities, Orb, hostnames, machine paths, or raw operational diagnostics. Keep those in private working notes when needed. A reviewer-facing blocker should preserve the technical meaning without infrastructure details, for example: `Blocked: the development fixture returned HTTP 500 before the changed error state rendered.`
+Do not publish agent or runner identities, Orb, execution-infrastructure hostnames, machine paths, infrastructure-hosted URLs, or raw operational diagnostics. Keep those in private working notes when needed. Reviewer-safe product and attachment URLs may be published; otherwise identify the product environment and route without the full URL. A reviewer-facing blocker should preserve the technical meaning without infrastructure details, for example: `Blocked: the development fixture returned HTTP 500 before the changed error state rendered.`

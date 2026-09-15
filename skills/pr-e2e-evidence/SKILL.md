@@ -12,7 +12,7 @@ Produce a compact, reproducible browser record that lets a reviewer judge the PR
 - Populate the evidence section with browser verification; add implementation verification when the user explicitly requests it.
 - Inventory the final diff's user-visible behavior changes and map each one to decisive executed evidence or an explicit pending item or blocker. Include changed success, error, loading, empty, focus, and accessibility states; do not let evidence for the primary flow stand in for adjacent changed behavior.
 - Name the actual product environment exercised—development, staging, or production—plus the route, browser surface, role, fixture or data, interaction mode, and result needed to reproduce each claim. Never promote a development fixture to staging or production, or call a local production-component fixture deployed verification.
-- Keep execution infrastructure out of published review evidence: no agent or runner identity, Orb, hostname, or machine path in PR prose, captions, annotations, or artifact labels. Browser engine/version, viewport, and screen-reader configuration are valid when relevant to compatibility or accessibility reproduction; macOS and browser metadata do not establish a product environment.
+- Keep execution infrastructure out of published review evidence: no agent or runner identity, Orb, execution-infrastructure hostname, or machine path in PR prose, captions, annotations, or artifact labels. Reviewer-safe product and attachment URLs are valid; for an infrastructure-hosted surface, publish the product environment and route while keeping its full URL private. Browser engine/version, viewport, and screen-reader configuration are valid when relevant to compatibility or accessibility reproduction; macOS and browser metadata do not establish a product environment.
 - Keep operational diagnostics private. Summarize a technical failure accurately in published evidence without machine details, and publish only reviewer-relevant environment, scenario, result, limitation, and blocker information.
 - Keep claims bounded to the scenario exercised. Record unrelated console or network noise separately and state whether it blocked the scenario.
 - Provide an adjacent text verdict for every visual artifact. Prefer PR prose over baked video captions when the native interaction and result are already visible; when annotation is necessary, use labels in addition to color without covering live UI.
@@ -52,13 +52,13 @@ Apply the screenshot-or-video gate above. Use the closest relevant browser envir
 - For screenshots or manual before/after comparison, read [`reference/screenshots.md`](reference/screenshots.md) before capture.
 - For temporal evidence, read [`reference/video.md`](reference/video.md) before recording.
 
-**Complete when:** each scenario has one chosen medium and the selected branch reference has been read.
+**Complete when:** each scenario has the smallest decisive evidence type or combination, and every applicable screenshot or video reference has been read.
 
 ### 4. Capture and inspect
 
 Exercise the real interaction mode and capture only the state needed to prove the result. Ground the exact surface before claiming coverage: related widgets or routes are separate claims. For accessibility evidence, distinguish computed DOM semantics from observed visual behavior and actual assistive-technology output. Inspect final media at normal review size; recapture evidence that shows stale loading, the wrong state, hidden labels, or misleading crops.
 
-**Complete when:** every claim has inspected evidence showing the named surface, action or comparison, and result, with no sensitive data.
+**Complete when:** every passed claim has inspected executed evidence showing the named surface, action or comparison, and result with no sensitive data, and every remaining changed behavior is explicitly pending or blocked with a reason.
 
 ### 5. Compose the local draft
 
@@ -77,7 +77,7 @@ Make the open PR body the default pre-merge evidence location. A repository conv
 
 Group evidence by scenario or surface, preserve the existing template, and explain what each artifact demonstrates.
 
-**Complete when:** the chosen review location renders the structured evidence and mapped media, its access boundary is verified independently, and existing content remains intact.
+**Complete when:** the chosen review location renders the structured evidence and mapped media, preserves every final-diff behavior's executed result and evidence reference or explicit pending/blocker reason, has an independently verified access boundary, and leaves existing content intact.
 
 ### 7. Follow the deployment
 
