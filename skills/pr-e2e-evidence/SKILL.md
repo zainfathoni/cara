@@ -10,16 +10,20 @@ Produce a compact, reproducible browser record that lets a reviewer judge the PR
 ## Evidence Contract
 
 - Populate the evidence section with browser verification; add implementation verification when the user explicitly requests it.
-- Name the exact environment, route, browser surface, role, fixture or data, interaction mode, and result needed to reproduce each claim.
+- Inventory the final diff's user-visible behavior changes and map each one to decisive executed evidence or an explicit pending item or blocker. Include changed success, error, loading, empty, focus, and accessibility states; do not let evidence for the primary flow stand in for adjacent changed behavior.
+- Name the actual product environment exercised—development, staging, or production—plus the route, browser surface, role, fixture or data, interaction mode, and result needed to reproduce each claim. Never promote a development fixture to staging or production, or call a local production-component fixture deployed verification.
+- Keep execution infrastructure out of published review evidence: no agent or runner identity, Orb, hostname, or machine path in PR prose, captions, annotations, or artifact labels. Browser engine/version, viewport, and screen-reader configuration are valid when relevant to compatibility or accessibility reproduction; macOS and browser metadata do not establish a product environment.
+- Keep operational diagnostics private. Summarize a technical failure accurately in published evidence without machine details, and publish only reviewer-relevant environment, scenario, result, limitation, and blocker information.
 - Keep claims bounded to the scenario exercised. Record unrelated console or network noise separately and state whether it blocked the scenario.
 - Provide an adjacent text verdict for every visual artifact. Prefer PR prose over baked video captions when the native interaction and result are already visible; when annotation is necessary, use labels in addition to color without covering live UI.
+- Match evidence to the claim: screenshots for static appearance and contrast, recordings for focus movement or timing, DOM assertions for role, live-region, and focus semantics, and human listening for actual screen-reader speech. Fixture status text is not proof of a production announcement.
 - Treat GitHub attachment URLs as shareable. Never capture secrets or sensitive merchant or customer data.
 
 ## Screenshot or Video Gate
 
 Use screenshots by default. Prefer one cropped, annotated before/after composite when a decision point and result tell the story together; focused after-only evidence is valid when labeled honestly.
 
-Choose video when motion, timing, or a multi-stage interaction is itself the evidence: navigation guards, loading transitions, save/discard lifecycles, animation, or layout shifts. Keep a decisive still and text verdict as the canonical review record. Treat the named scenario as the video's full coverage boundary.
+Choose video when motion, timing, focus movement, or a multi-stage interaction is itself the evidence: navigation guards, loading transitions, save/discard lifecycles, animation, or layout shifts. Keep a decisive still and text verdict as the canonical review record. Treat the named scenario as the video's full coverage boundary.
 
 ## Ordered Evidence Process
 
@@ -37,13 +41,13 @@ If no PR exists and PR creation is in scope, create one while preserving the tem
 
 ### 2. Define the proof
 
-Write a bounded scenario with its starting state, action, expected result, route, fixture/data, and meaningful console or network checks. For a regression comparison, identify the stable baseline and candidate and align viewport, scroll position, filters, dates, account, role, flags, and UI mode as closely as practical.
+Inspect the final diff and list each user-visible behavior it changes. For every item, write a bounded scenario with its starting state, action, expected result, route, fixture/data, and meaningful console or network checks, then assign decisive evidence or mark it pending or blocked with a reason. Include changed error, loading, empty, invalidation, focus, contrast, and announcement behavior instead of documenting only the happy path. For a regression comparison, identify the stable baseline and candidate and align viewport, scroll position, filters, dates, account, role, flags, and UI mode as closely as practical.
 
-**Complete when:** every intended claim maps to one reproducible browser scenario and any unavoidable baseline/candidate mismatch is recorded.
+**Complete when:** every user-visible change in the final diff maps to one reproducible scenario and decisive evidence, pending item, or blocker, and any unavoidable baseline/candidate mismatch is recorded.
 
 ### 3. Choose the smallest decisive medium
 
-Apply the screenshot-or-video gate above. Use the closest relevant browser environment: local dev, preview, staging, or a production baseline plus candidate deployment.
+Apply the screenshot-or-video gate above. Use the closest relevant browser environment and label it by its actual product tier: development (including a local or preview fixture), staging, or production.
 
 - For screenshots or manual before/after comparison, read [`reference/screenshots.md`](reference/screenshots.md) before capture.
 - For temporal evidence, read [`reference/video.md`](reference/video.md) before recording.
@@ -52,15 +56,15 @@ Apply the screenshot-or-video gate above. Use the closest relevant browser envir
 
 ### 4. Capture and inspect
 
-Exercise the real interaction mode and capture only the state needed to prove the result. Ground the exact surface before claiming coverage: related widgets or routes are separate claims. Inspect final media at normal review size; recapture evidence that shows stale loading, the wrong state, hidden labels, or misleading crops.
+Exercise the real interaction mode and capture only the state needed to prove the result. Ground the exact surface before claiming coverage: related widgets or routes are separate claims. For accessibility evidence, distinguish computed DOM semantics from observed visual behavior and actual assistive-technology output. Inspect final media at normal review size; recapture evidence that shows stale loading, the wrong state, hidden labels, or misleading crops.
 
-**Complete when:** every claim has inspected media showing the named surface, action or comparison, and result, with no sensitive data.
+**Complete when:** every claim has inspected evidence showing the named surface, action or comparison, and result, with no sensitive data.
 
 ### 5. Compose the local draft
 
 Create `docs/tests/<platform>-<id>/<file>.md`, store draft screenshots in the same evidence area, and embed them with relative paths. Record branch and commit, URLs, scenario, result, reproduction context, console/network notes, limitations, and cleanup. Read [`reference/pr-templates.md`](reference/pr-templates.md) when composing the draft or PR section.
 
-Treat this directory as working material for the final PR evidence rather than the final destination.
+Treat this directory as working material for the final PR evidence rather than the final destination. Private operational notes may retain local paths or execution diagnostics when needed to finish the work, but remove them when transferring evidence into reviewer-facing prose, captions, annotations, or filenames.
 
 **Complete when:** the local Markdown renders as a self-contained review draft and every media reference resolves relatively.
 
@@ -77,7 +81,7 @@ Group evidence by scenario or surface, preserve the existing template, and expla
 
 ### 7. Follow the deployment
 
-When preview, staging, or production verification is required, keep that environment marked pending until it is ready, then repeat the same bounded scenario in the deployed environment. Use the closest supported equivalent when a surface is unavailable and explain the difference.
+When a candidate deployment, staging, or production verification is required, keep its actual product environment marked pending until it is ready, then repeat the same bounded scenario there. Use the closest supported equivalent when a surface is unavailable and explain the difference.
 
 Update the local draft while it remains active. Before merge, replace pending body text with the deployed result. After merge, an intentional PR comment may record production verification chronologically; use GitHub-hosted attachments, production URLs, scenario grouping, and console/network notes.
 
