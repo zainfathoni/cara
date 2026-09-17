@@ -86,7 +86,7 @@ For manual control or troubleshooting, the underlying scripts are:
 ~/Code/GitHub/zainfathoni/cara/skills/install.sh
 ```
 
-`skills/update-upstream.sh` installs a release-pinned allowlist of upstream-tracked skills, including `shadcn/improve`, and intentionally excludes local-owned `teach`, so pulling this repo does not depend on a human remembering which upstream skills are safe to update. Upstream `wizard` remains blocked pending local file/repository mutation hardening.
+`skills/update-upstream.sh` installs a release-pinned allowlist of upstream-tracked skills, including `shadcn/improve`, `firewalker06/tycho`, and `typesafe-ai/skills`, and intentionally excludes local-owned `teach`, so pulling this repo does not depend on a human remembering which upstream skills are safe to update. Upstream `wizard` remains blocked pending local file/repository mutation hardening.
 
 By default this symlinks the small global selection documented in
 [`skills/README.md`](skills/README.md) into `~/.agents/skills`. Pass skill names

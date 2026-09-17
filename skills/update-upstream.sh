@@ -7,6 +7,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 UPSTREAM_PACKAGE=${UPSTREAM_SKILLS_PACKAGE:-https://github.com/mattpocock/skills.git#v1.2.3}
 IMPROVE_PACKAGE=${IMPROVE_SKILLS_PACKAGE:-shadcn/improve}
 TYCHO_PACKAGE=${TYCHO_SKILLS_PACKAGE:-firewalker06/tycho}
+TYPESAFE_PACKAGE=${TYPESAFE_SKILLS_PACKAGE:-typesafe-ai/skills}
 UPSTREAM_AGENTS=${UPSTREAM_SKILLS_AGENTS:-amp claude-code codex}
 UPSTREAM_REF=""
 case "$UPSTREAM_PACKAGE" in
@@ -53,6 +54,10 @@ IMPROVE_SKILLS=(
 
 TYCHO_SKILLS=(
   tycho
+)
+
+TYPESAFE_SKILLS=(
+  typesafe-ai
 )
 
 # Upstream skills that were renamed, merged, or retired and should no longer exist.
@@ -221,6 +226,31 @@ verify_tycho_installation() {
   ' "$GLOBAL_SKILL_LOCK"
 }
 
+verify_typesafe_installation() {
+  local agent
+  local root
+
+  for agent in "${upstream_agents[@]}"; do
+    root=$(agent_skill_root "$agent")
+    verify_skill_file "$root/typesafe-ai/SKILL.md"
+  done
+
+  if [ -e "$CANONICAL_UPSTREAM_ROOT/typesafe-ai" ] || [ -L "$CANONICAL_UPSTREAM_ROOT/typesafe-ai" ]; then
+    verify_skill_file "$CANONICAL_UPSTREAM_ROOT/typesafe-ai/SKILL.md"
+  fi
+
+  node -e '
+    const fs = require("fs");
+    const lockPath = process.argv[1];
+    const lock = JSON.parse(fs.readFileSync(lockPath, "utf8"));
+    const typesafe = lock.skills && lock.skills["typesafe-ai"];
+    if (!typesafe || typesafe.source !== "typesafe-ai/skills" || typesafe.sourceType !== "github") {
+      console.error(`Unexpected typesafe-ai provenance in ${lockPath}`);
+      process.exit(1);
+    }
+  ' "$GLOBAL_SKILL_LOCK"
+}
+
 for agent in "${upstream_agents[@]}"; do
   agent_skill_root "$agent" >/dev/null
 done
@@ -303,3 +333,17 @@ npx --yes skills@latest add "$TYCHO_PACKAGE" \
   "${tycho_skill_args[@]}"
 
 verify_tycho_installation
+
+typesafe_skill_args=()
+for skill in "${TYPESAFE_SKILLS[@]}"; do
+  typesafe_skill_args+=(--skill "$skill")
+done
+
+npx --yes skills@latest add "$TYPESAFE_PACKAGE" \
+  --global \
+  "${agent_args[@]}" \
+  --copy \
+  --yes \
+  "${typesafe_skill_args[@]}"
+
+verify_typesafe_installation
