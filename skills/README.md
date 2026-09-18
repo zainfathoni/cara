@@ -10,12 +10,11 @@ Cara owns these skill sources even when a skill is installed only for one projec
 - `squash-commits` - prepare a chronological rebase guide and, when explicitly authorized, execute and verify the guided squash.
 - `pr-e2e-evidence` - collect repo-agnostic PR QA evidence: E2E results, browser verification notes, report screenshots, before/after screenshots, and PR description updates.
 - `managing-dev-environments` - prepare, inspect, and release development runtimes and task-owned browser sessions. Complements `pr-e2e-evidence`; release means teardown, not deployment. Concrete commands and environment permissions remain repo-owned.
-- `creating-bta-worktrees` - create and repair BookThatApp sibling worktrees with matching local branches, shared symlinks, and Docker-safe runtime files.
-- `creating-bta-prs` - rename BookThatApp issue worktree branches to existing BTA conventions, commit and push focused changes, and create GitHub PRs from the repo template.
 - `show-me` - render topic-oriented visuals as diagrams, pseudocode, file trees, and focused HTML artifacts.
 - `hey-cli-second-identity` - give one agent its own HEY account through the hey CLI without clobbering the operator's login: keyring-collision workaround, wrapper-carried credentials, agent-side verification, and the calendar gotchas.
-- `checking-bta-dev-health` - inventory unfinished BookThatApp work and check bounded agent, credential, runtime, staging, disk, worktree, and temporary-browser readiness before AFK development.
 - `teach` - stateful, multi-session teaching workspace (mission, lessons, reference docs, learning records, reusable workspace assets, workspace-owned hosting docs). Vendored from Matt Pocock's AI Hero ([learn-anything-with-my-teach-skill](https://www.aihero.dev/learn-anything-with-my-teach-skill)) and tracked here so local modifications are version-controlled. Local changes: codebase lessons link source references via `vscode://file/<path>:<line>` deep links and pinned GitHub permalinks; lesson hosting is documented per workspace.
+
+BookThatApp-specific operational skills are maintained in the owner's private notes repository and are not shipped by Cara.
 
 `teach` is local-owned. Do not overwrite it with `npx skills add mattpocock/skills`; compare upstream changes in a separate grilling session and selectively port only the accepted parts.
 
@@ -84,19 +83,9 @@ The copied multi-agent installation remains authoritative. Do not install Matt's
 review skills, `pr-e2e-evidence`, `managing-dev-environments`, `fizzy`,
 `log-notes`, and `sync-skills`.
 
-The BTA-only selection is `checking-bta-dev-health`, `creating-bta-worktrees`,
-`creating-bta-prs`, `daily-standup`, and `release`. Install it into a
-project-owned discovery root by passing those five names explicitly.
-
 Occasional workflows such as `hey-cli-second-identity`, `show-me`,
 `squash-commits`, and `teach` are optional. Install any explicit selection by
-passing its names; no profile or alias layer is involved. For example:
-
-```bash
-AGENT_SKILLS_DIR=/path/to/project/.agents/skills \
-  ~/Code/GitHub/zainfathoni/cara/skills/install.sh \
-  checking-bta-dev-health creating-bta-worktrees creating-bta-prs daily-standup release
-```
+passing its names; no profile or alias layer is involved.
 
 The default target remains `~/.agents/skills`; override it with
 `AGENT_SKILLS_DIR`. Use `install.sh --list` to inspect the default selection

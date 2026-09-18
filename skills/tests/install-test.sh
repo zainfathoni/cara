@@ -32,7 +32,6 @@ diff -u "$TMP_ROOT/expected-defaults" "$TMP_ROOT/actual-defaults" || fail "defau
 while IFS= read -r skill; do
   assert_link "$skill" "$default_root"
 done < "$TMP_ROOT/expected-defaults"
-[ ! -e "$default_root/checking-bta-dev-health" ] || fail "BTA-only skill was globally installed"
 [ ! -e "$default_root/teach" ] || fail "optional skill was globally installed"
 
 selected_root="$TMP_ROOT/selected"
@@ -40,18 +39,28 @@ mkdir -p "$selected_root"
 foreign_source="$TMP_ROOT/foreign-source"
 mkdir -p "$foreign_source"
 ln -s "$foreign_source" "$selected_root/foreign-skill"
-AGENT_SKILLS_DIR="$selected_root" "$INSTALLER" checking-bta-dev-health teach >/dev/null
-assert_link checking-bta-dev-health "$selected_root"
+AGENT_SKILLS_DIR="$selected_root" "$INSTALLER" show-me teach >/dev/null
+assert_link show-me "$selected_root"
 assert_link teach "$selected_root"
 [ "$(readlink "$selected_root/foreign-skill")" = "$foreign_source" ] || fail "foreign symlink was changed"
 
 # A default sync must not restore every Cara source or remove explicit and
 # foreign-owned selections that already exist in the same root.
 AGENT_SKILLS_DIR="$selected_root" "$INSTALLER" >/dev/null
-assert_link checking-bta-dev-health "$selected_root"
+assert_link show-me "$selected_root"
 assert_link teach "$selected_root"
 [ "$(readlink "$selected_root/foreign-skill")" = "$foreign_source" ] || fail "default sync changed foreign symlink"
-[ ! -e "$selected_root/show-me" ] || fail "default sync restored an unselected skill"
+
+for removed_skill in \
+  checking-bta-dev-health \
+  creating-bta-worktrees \
+  creating-bta-prs \
+  daily-standup \
+  release; do
+  if AGENT_SKILLS_DIR="$TMP_ROOT/removed-$removed_skill" "$INSTALLER" "$removed_skill" >/dev/null 2>&1; then
+    fail "removed skill was accepted: $removed_skill"
+  fi
+done
 
 if AGENT_SKILLS_DIR="$TMP_ROOT/unknown" "$INSTALLER" not-a-skill >/dev/null 2>&1; then
   fail "unknown skill was accepted"
