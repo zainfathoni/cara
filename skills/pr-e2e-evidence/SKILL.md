@@ -39,6 +39,8 @@ If no PR exists and PR creation is in scope, create one while preserving the tem
 
 When using a development runtime, load `/managing-dev-environments` for ownership checks, setup, and source readiness before capture. Repository docs own the concrete lifecycle commands and environment permissions.
 
+When Chrome DevTools MCP is the selected browser tool, require one minimal page-listing call to succeed on the intended runner before assigning capture or relying on an existing session. A configured MCP entry, running Chrome process, historical success, or another thread's working connection is not readiness for this connection. If the check fails, stop browser work there and follow the repository's browser troubleshooting guidance. Preserve existing sessions and authentication; changing connection mode, starting a separate profile, or transferring authentication requires an explicit owner decision.
+
 **Complete when:** the PR target, template placement, environment, exact browser surface, access context, and required deployment follow-up are known.
 
 ### 2. Define the proof
