@@ -24,7 +24,10 @@ assert_link() {
 }
 
 default_root="$TMP_ROOT/default"
+mkdir -p "$default_root"
+ln -s "$SKILLS_ROOT/log-notes" "$default_root/log-notes"
 AGENT_SKILLS_DIR="$default_root" "$INSTALLER" >/dev/null
+[ ! -L "$default_root/log-notes" ] || fail "renamed log-notes link was preserved"
 
 "$INSTALLER" --list | sort > "$TMP_ROOT/expected-defaults"
 find "$default_root" -mindepth 1 -maxdepth 1 -type l -exec basename {} \; | sort > "$TMP_ROOT/actual-defaults"
@@ -39,6 +42,7 @@ mkdir -p "$selected_root"
 foreign_source="$TMP_ROOT/foreign-source"
 mkdir -p "$foreign_source"
 ln -s "$foreign_source" "$selected_root/foreign-skill"
+ln -s "$foreign_source" "$selected_root/log-notes"
 AGENT_SKILLS_DIR="$selected_root" "$INSTALLER" show-me teach >/dev/null
 assert_link show-me "$selected_root"
 assert_link teach "$selected_root"
@@ -50,6 +54,7 @@ AGENT_SKILLS_DIR="$selected_root" "$INSTALLER" >/dev/null
 assert_link show-me "$selected_root"
 assert_link teach "$selected_root"
 [ "$(readlink "$selected_root/foreign-skill")" = "$foreign_source" ] || fail "default sync changed foreign symlink"
+[ "$(readlink "$selected_root/log-notes")" = "$foreign_source" ] || fail "default sync changed foreign renamed-skill link"
 
 for removed_skill in \
   checking-bta-dev-health \

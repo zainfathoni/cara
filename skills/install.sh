@@ -10,7 +10,7 @@ TARGET_ROOT=${AGENT_SKILLS_DIR:-$HOME/.agents/skills}
 # remain available by passing their names as arguments.
 DEFAULT_SKILLS=(
   fizzy
-  log-notes
+  log-fleet
   managing-dev-environments
   pr-e2e-evidence
   review-address
@@ -80,6 +80,15 @@ if [ "$list_only" = true ]; then
 fi
 
 mkdir -p "$TARGET_ROOT"
+
+for skill_name in "${selected_skills[@]}"; do
+  if [ "$skill_name" = log-fleet ] &&
+    [ -L "$TARGET_ROOT/log-notes" ] &&
+    [ "$(readlink "$TARGET_ROOT/log-notes")" = "$SKILLS_ROOT/log-notes" ]; then
+    rm "$TARGET_ROOT/log-notes"
+    printf 'Removed renamed skill link: %s\n' "$TARGET_ROOT/log-notes"
+  fi
+done
 
 installed=0
 

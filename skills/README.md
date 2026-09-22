@@ -6,7 +6,7 @@ Cara owns these skill sources even when a skill is installed only for one projec
 
 - `fizzy` - manage Fizzy boards, cards, steps, comments, reactions, and pins. Card descriptions must be authored as HTML and card relationships must be linked.
 - `sync-skills` - synchronize global skill installations across machines: update upstream skills, clean up deprecated ones, install local-owned shared skills, and verify the result. The single entry point for setting up or auditing any machine.
-- `log-notes` - log completed agent work into iCloud-synced Obsidian daily notes and relevant topical/project notes.
+- `log-fleet` - route completed agent work and durable context to the owning fleet or iCloud Obsidian notes.
 - `squash-commits` - prepare a chronological rebase guide and, when explicitly authorized, execute and verify the guided squash.
 - `pr-e2e-evidence` - collect repo-agnostic PR QA evidence: E2E results, browser verification notes, report screenshots, before/after screenshots, and PR description updates.
 - `managing-dev-environments` - prepare, inspect, and release development runtimes and task-owned browser sessions. Complements `pr-e2e-evidence`; release means teardown, not deployment. Concrete commands and environment permissions remain repo-owned.
@@ -81,7 +81,7 @@ The copied multi-agent installation remains authoritative. Do not install Matt's
 
 `install.sh` symlinks a deliberately small default global selection: the six
 review skills, `pr-e2e-evidence`, `managing-dev-environments`, `fizzy`,
-`log-notes`, and `sync-skills`.
+`log-fleet`, and `sync-skills`.
 
 Occasional workflows such as `hey-cli-second-identity`, `show-me`,
 `squash-commits`, and `teach` are optional. Install any explicit selection by
