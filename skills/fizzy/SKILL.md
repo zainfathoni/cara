@@ -5,6 +5,8 @@ description: Manages Fizzy resources through its CLI. Use for card or board oper
 
 # Fizzy CLI
 
+Targets upstream Fizzy CLI **4.0.1**. Cara owns this customized skill. In **Amp**, first read [Amp-wide identities](reference/amp-wide.md) and use its bundled scope runner for every operation; CLI examples below describe arguments to that runner. For installation, upgrades, wrapper behavior, or portable credentials, read [runtime setup](reference/runtime-setup.md).
+
 Route every Fizzy request through the ordered process below. Load only the branch references whose firing conditions match the request.
 
 ## Universal invariants
@@ -22,11 +24,11 @@ Boards, columns, comments, steps, reactions, users, notifications, and other res
 
 ### Accounts
 
-Commands operate in the selected account. Run `fizzy identity show` when the account is unknown or a request crosses accounts; select the account with global `--account SLUG`. Before account selection, completion means the intended account slug and the acting user are known.
+Commands operate in the selected account. Run `fizzy identity show` when the account is unknown or a request crosses accounts; select a saved profile with global `--profile NAME`. A profile name can be an alias: verify its account and acting user with `identity show`. Runtime `FIZZY_TOKEN` supplies the acting identity; retain per-agent token scope. Before account selection, completion means the intended account slug and the acting user are known.
 
 ### Discovery and output
 
-Fizzy returns JSON envelopes. Use `jq` with the exact paths in [response and schemas](reference/response-and-schemas.md) rather than inferring shapes. In particular, card `.description` is a string, comment text is `.body.plain_text`, and steps occur in `card show`, not `card list`.
+Use explicit `--json` for envelopes or built-in `--jq` for a projection; `--jq` implies JSON. `--agent` alone returns raw data, so it changes `.data` paths. Fizzy returns JSON envelopes. Use `jq` with the exact paths in [response and schemas](reference/response-and-schemas.md) rather than inferring shapes. In particular, card `.description` is a string, comment text is `.body.plain_text`, and steps occur in `card show`, not `card list`; `step list --card NUMBER` also exists.
 
 Responses can include `breadcrumbs` containing `action`, ready-to-run `cmd`, and `description`. Treat them as contextual action discovery: keep interpolated card/board values and replace angle-bracket placeholders such as `<column_id>` before execution.
 
@@ -41,7 +43,7 @@ A complete board inventory therefore uses separate status queries and complete p
 
 Before a destructive, state-changing, or cross-account operation, resolve the target in the selected account and retain its number/ID. For card-description mutations, first load [card description formatting](reference/card-description-formatting.md); it is the sole authority for HTML, links, relationships, and image placement.
 
-After every mutation, inspect `success`, `error`, and returned `data`/`location`, then read the changed resource with its show/list command. Compare the requested fields or relationship against the read-back value. For card descriptions, verification includes `.description_html` tags and clickable card relationships. Completion means the response succeeded and the persisted state—not merely the mutation response—matches the request.
+After every mutation, inspect `ok`, `error`, `code`, and returned `data`/`context.location`, then read the changed resource with its show/list command. Compare the requested fields or relationship against the read-back value. For card descriptions, verification includes `.description_html` tags and clickable card relationships. Completion means the response succeeded and the persisted state—not merely the mutation response—matches the request.
 
 Mutation verification is operation-specific:
 
@@ -62,7 +64,7 @@ Toggle commands such as assign and tag depend on current state. Discover that st
 
 Identify the resource, action, supplied identifiers, desired state, and account. If the request names a card ID but needs a card command, discover its card number from JSON before continuing. If account context is ambiguous, resolve it with `identity show`.
 
-**Complete when:** one account, one target resource, the CLI-form identifier, and the requested outcome are explicit.
+**Complete when:** one verified account/profile, one target resource, the CLI-form identifier, and the requested outcome are explicit.
 
 ### 2. Load branch reference
 

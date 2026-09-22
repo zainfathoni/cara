@@ -8,15 +8,17 @@ All commands support:
 
 | Flag | Description |
 |------|-------------|
-| `--account SLUG` | Account slug (for multi-account users) |
-| `--pretty` | Pretty-print JSON output |
+| `--profile NAME` | Saved profile name or alias (verify its account and user) |
+| `--json` | Explicit JSON envelope |
 | `--verbose` | Show request/response details |
 
 ---
 
+`fizzy search QUERY` performs ranked full-text search. For board, status, tag, assignee, sort, or pagination filters use `fizzy card list --search QUERY`.
+
 ## Pagination
 
-List commands use `--page` for pagination. There is NO `--limit` flag.
+List commands use `--page` for pagination and `--limit N` for client-side truncation. `--limit` and `--all` cannot be combined.
 
 ```bash
 # Get first page (default)
@@ -34,7 +36,6 @@ fizzy card list --all
 Commands supporting `--all` and `--page`:
 - `board list`
 - `card list`
-- `search`
 - `comment list`
 - `tag list`
 - `user list`
@@ -58,11 +59,11 @@ You can also use pseudo-columns:
 
 ```bash
 fizzy card list --column done --all     # Same as --indexed-by closed
-fizzy card list --column not-yet --all  # Same as --indexed-by not_now
+fizzy card list --column not-now --all  # Same as --indexed-by not_now
 fizzy card list --column maybe --all    # Cards in triage (no column assigned)
 ```
 
-The CLI pseudo-column value is `not-yet`; JSON column data may expose the corresponding pseudo ID as `not-now`, while `--indexed-by` uses `not_now`.
+The CLI pseudo-column value is `not-now`; JSON column data may expose the corresponding pseudo ID as `not-now`, while `--indexed-by` uses `not_now`.
 
 **Fetching all cards on a board:**
 
@@ -128,7 +129,7 @@ fizzy comment list --card 579 | jq '[.data[].body.plain_text]'
 fizzy card show 579 | jq -r '.data.description_html'
 
 # Step completion status
-fizzy card show 579 | jq '[.data.steps[] | {content, completed}]'
+fizzy card show 579 | jq '[.data.steps[]? | {content, completed}]'
 ```
 
 ### Activity Analysis

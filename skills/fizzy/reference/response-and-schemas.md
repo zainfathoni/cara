@@ -1,101 +1,24 @@
-# Fizzy Responses and Schemas
+# Fizzy responses and schemas
 
-Load this reference when parsing output, selecting `jq` paths, handling errors, or inspecting resource fields.
-
-## Response Structure
-
-All responses follow this structure:
+Use `--json` to retain the envelope. Built-in `--jq` filters that envelope; `--quiet` or `--agent` instead unwrap `.data`.
 
 ```json
-{
-  "success": true,
-  "data": { ... },           // Single object or array
-  "summary": "4 boards",     // Human-readable description
-  "breadcrumbs": [ ... ],    // Contextual next actions (omitted when empty)
-  "meta": {
-    "timestamp": "2026-01-12T21:21:48Z"
-  }
-}
+{"ok": true, "data": {}, "summary": "Resource summary", "context": {}, "breadcrumbs": []}
 ```
 
-**Summary field formats:**
-| Command | Example Summary |
-|---------|-----------------|
-| `board list` | "5 boards" |
-| `board show ID` | "Board: Engineering" |
-| `card list` | "42 cards (page 1)" or "42 cards (all)" |
-| `card show 123` | "Card #123: Fix login bug" |
-| `search "bug"` | "7 results for \"bug\"" |
-| `notification list` | "8 notifications (3 unread)" |
+Optional pagination is under `.context.pagination`; create locations are under `.context.location`. Errors use `{"ok": false, "error": "message", "code": "NOT_FOUND"}`. Check both the process exit status and `.ok` before reading `.data`. Metadata and optional fields may be absent.
 
-**List responses with pagination:**
-```json
-{
-  "success": true,
-  "data": [ ... ],
-  "summary": "10 cards (page 1)",
-  "pagination": {
-    "has_next": true,
-    "next_url": "https://..."
-  },
-  "meta": { ... }
-}
-```
+Exit codes: 1 usage, 2 not found, 3 authentication, 4 forbidden, 5 rate limit, 6 network, 7 API/general failure, 8 ambiguous match.
 
-**Breadcrumbs (contextual next actions):**
-
-Responses include a `breadcrumbs` array suggesting what you can do next. Each breadcrumb has:
-- `action`: Short action name (e.g., "comment", "close", "assign")
-- `cmd`: Ready-to-run command with actual values interpolated
-- `description`: Human-readable description
-
-```bash
-fizzy card show 42 | jq '.breadcrumbs'
-```
-
-```json
-[
-  {"action": "comment", "cmd": "fizzy comment create --card 42 --body \"text\"", "description": "Add comment"},
-  {"action": "triage", "cmd": "fizzy card column 42 --column <column_id>", "description": "Move to column"},
-  {"action": "close", "cmd": "fizzy card close 42", "description": "Close card"},
-  {"action": "assign", "cmd": "fizzy card assign 42 --user <user_id>", "description": "Assign user"}
-]
-```
-
-Use breadcrumbs to discover available actions without memorizing the full CLI. Values like card numbers and board IDs are pre-filled; placeholders like `<column_id>` need to be replaced.
-
-**Error responses:**
-```json
-{
-  "success": false,
-  "error": {
-    "code": "NOT_FOUND",
-    "message": "Not Found",
-    "status": 404
-  },
-  "meta": { ... }
-}
-```
-
-**Create/update responses include location:**
-```json
-{
-  "success": true,
-  "data": { ... },
-  "location": "/6102600/cards/579.json",
-  "meta": { ... }
-}
-```
-
----
+Breadcrumbs contain `action`, `cmd`, and `description`. Read them with `fizzy card show NUMBER --jq '.breadcrumbs'`. Resolve placeholders and apply the user's scope before running a suggested command.
 
 ## Resource Schemas
 
-Complete field reference for all resources. Use these exact field paths in jq queries.
+Common resource fields. Inspect actual results before relying on optional fields.
 
 ### Card Schema
 
-**IMPORTANT:** `card list` and `card show` return different fields. `steps` only in `card show`.
+**IMPORTANT:** `card list` and `card show` can omit optional relationships. Treat absent arrays with `// []` or optional iteration; use `step list --card NUMBER` when steps are needed.
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -116,8 +39,8 @@ Complete field reference for all resources. Use these exact field paths in jq qu
 | `board` | object | Nested Board (see below) |
 | `creator` | object | Nested User (see below) |
 | `assignees` | array | Array of User objects |
-| `tags` | array | Array of Tag objects |
-| `steps` | array | **Only in `card show`**, not in list |
+| `tags` | array/null | Optional tag values; inspect the returned shape before projecting IDs or names |
+| `steps` | array/null | Optional in `card show`; use `step list --card NUMBER` when absent |
 
 ### Board Schema
 
@@ -199,7 +122,7 @@ Complete field reference for all resources. Use these exact field paths in jq qu
 | `accounts` | array | Array of Account objects |
 | `accounts[].id` | string | Account ID |
 | `accounts[].name` | string | Account name |
-| `accounts[].slug` | string | Account slug (use with --account) |
+| `accounts[].slug` | string | Account slug (verify against the selected profile) |
 | `accounts[].user` | object | Your User in this account |
 
 ### Key Schema Differences

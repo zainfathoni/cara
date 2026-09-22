@@ -4,7 +4,7 @@ Load this reference before creating or changing a card description, adding rich-
 
 ## Card Description Formatting
 
-**Always pass card descriptions as HTML, not Markdown or plain text.** Fizzy stores a plain-text `.description`, but the rendered card body is ActionText HTML in `.description_html`. Plain text with headings like `ContextFoo` or list markers like `• item` renders poorly and breaks existing card styling.
+**Cara convention: author card descriptions as HTML to preserve exact structure and relationship links.** Fizzy 4 also converts Markdown natively; this convention is a local formatting choice, not an API limitation. Fizzy stores a plain-text `.description`, but the rendered card body is ActionText HTML in `.description_html`. Plain text with headings like `ContextFoo` or list markers like `• item` renders poorly and breaks existing card styling.
 
 Use these tags for card descriptions:
 

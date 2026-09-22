@@ -80,7 +80,7 @@ fizzy card move 579 --to TARGET_BOARD_ID
 fizzy search "bug" | jq '[.data[] | {number, title}]'
 
 # Search with filters
-fizzy search "login" --board BOARD_ID --sort newest
+fizzy card list --search "login" --board BOARD_ID --sort newest
 
 # Find recently created cards
 fizzy card list --created today --sort newest
