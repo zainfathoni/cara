@@ -1,6 +1,6 @@
-# Evidence Templates
+# Evidence Draft and PR Placement
 
-Read this reference while composing the local draft or the PR's `## E2E evidence` section. Adapt labels to the repository and omit fields that do not apply.
+Read this reference while composing the local draft or the PR evidence. The target repository's `.github/pull_request_template.md` is the only PR-body template. Adapt the local draft to the task; it is not a PR-body template.
 
 ## Local draft
 
@@ -45,48 +45,13 @@ Console/network notes:
 ![Scenario label](./<assets-dir>/<scenario-screenshot>.png)
 ````
 
-## PR body section
+## PR evidence placement
 
-Place this near the repository's QA, validation, or checklist section without replacing template content:
+Read the target repository's PR template before editing the body. Preserve its headings, checklist, and existing text. Add evidence near its QA or checklist section, not as an alternative body template. For BookThatApp, use one `## E2E evidence` heading with one `<details>` block. Put a short `<summary>E2E evidence</summary>` on the next line; do not use the `open` attribute. End the block with `</details>`. Check the rendered PR to confirm that the block is closed by default, the content expands, and the media renders.
 
-````md
-## E2E evidence
+Inside that block, use one short line per changed scenario: the actual product environment, the specific result or pending reason, and a reviewer-safe link to decisive evidence. Add a route, data fixture, client configuration, or limitation only when the reviewer needs it to understand or reproduce the result. Do not paste the local coverage table, command lines, script names, or routine console and network notes into the PR. Keep those details in the local draft. State a relevant failure or blocker in plain terms; do not hide it. Write the summary, verdicts, and captions in ASD-STE100: common words, active voice, and short sentences. Keep exact product labels and technical identifiers when necessary.
 
-<details>
-<summary>Development — <scenario> — <passed | pending | blocked></summary>
-
-Verdict: `<passed with a scenario-scoped result | pending or blocked with a reason>`
-
-Relevant client configuration:
-- `<browser engine/version, viewport, and screen reader when needed>`
-
-Changed-behavior coverage:
-
-| User-visible change | Executed result and evidence reference | Status |
-| --- | --- | --- |
-| `<changed behavior>` | `<observed result plus attachment link, DOM assertion output, or human-listening result; use the reason when not executed>` | `<passed, pending, or blocked>` |
-
-Reproduction context:
-- Route/surface: `<route and exact surface>`
-- Fixture/data: `<fixture or record>`
-
-Console/network notes:
-- `<notable warnings or none>`
-
-Evidence:
-- `<scenario-scoped screenshot, recording, assertion, or listening result and reviewer-safe reference>`
-
-</details>
-
-<details>
-<summary>Staging — <scenario> — pending</summary>
-
-Verdict: `Pending staging deployment: <reason>`
-
-</details>
-````
-
-Use `Manual browser verification evidence` when that is the accurate summary. For baseline/candidate comparisons, state both URLs and explain any parity gap. Label focused after-only evidence honestly.
+For baseline/candidate comparisons, identify both product environments and explain any material mismatch. Label focused after-only evidence honestly. Do not report a pending staging result as passed.
 
 Use product-environment language in published evidence, not execution-infrastructure language:
 

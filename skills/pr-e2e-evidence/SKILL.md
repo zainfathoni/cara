@@ -9,7 +9,7 @@ Produce a compact, reproducible browser record that lets a reviewer judge the PR
 
 ## Evidence Contract
 
-- Populate the evidence section with browser verification; add implementation verification when the user explicitly requests it.
+- Populate the evidence section with browser verification; add implementation verification when the user explicitly requests it. Use the target repository's PR template as the only PR-body structure. Write published PR prose in ASD-STE100.
 - Inventory the final diff's user-visible behavior changes and map each one to decisive executed evidence or an explicit pending item or blocker. Include changed success, error, loading, empty, focus, and accessibility states; do not let evidence for the primary flow stand in for adjacent changed behavior.
 - Name the actual product environment exercised—development, staging, or production—plus the route, browser surface, role, fixture or data, interaction mode, and result needed to reproduce each claim. Never promote a development fixture to staging or production, or call a local production-component fixture deployed verification.
 - Keep execution infrastructure out of published review evidence: no agent or runner identity, Orb, execution-infrastructure hostname, or machine path in PR prose, captions, annotations, or artifact labels. Reviewer-safe product and attachment URLs are valid; for an infrastructure-hosted surface, publish the product environment and route while keeping its full URL private. Browser engine/version, viewport, and screen-reader configuration are valid when relevant to compatibility or accessibility reproduction; macOS and browser metadata do not establish a product environment.
@@ -74,7 +74,7 @@ Treat this directory as working material for the final PR evidence rather than t
 
 ### 6. Publish the pre-merge evidence
 
-Make the open PR body the default pre-merge evidence location. A repository convention or explicit user request may select an intentional comment, Google Drive archive, or Google Docs review instead. Transfer the structured evidence and embed renderable media. For Google Docs response synchronization, hand the audited package inventory and artifact mapping to the `audit-doc-sync` skill.
+Make the open PR body the default pre-merge evidence location. A repository convention or explicit user request may select an intentional comment, Google Drive archive, or Google Docs review instead. Keep the repository PR template intact. Add one concise, closed E2E evidence block near its QA or checklist section; do not paste the local draft or add a competing PR layout. Transfer only decisive verdicts and renderable media. For Google Docs response synchronization, hand the audited package inventory and artifact mapping to the `audit-doc-sync` skill.
 
 - For GitHub-hosted attachments, read and follow [`reference/github-publishing.md`](reference/github-publishing.md).
 - For a Drive archive, read and follow [`reference/google-drive-docs-publishing.md`](reference/google-drive-docs-publishing.md).
