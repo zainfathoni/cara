@@ -2,6 +2,22 @@
 
 Evidence checked on 2026-09-30. The originating Amp coordinator handled the producer and bridge. A separate delivery coordinator handled user delivery. The Cara author checked their records, not the private media itself.
 
+## Browser workflow revision
+
+On 2026-10-01, the Cara editor inspected the [Cukup production and review thread](https://ampcode.com/threads/T-01a0de56-e932-77d6-90f3-b3a396cabd54), PR31 sources and review response, and BTA Desk's design authority. The [browser production reference](browser-production.md) records pinned sources, actual commands, acceptance evidence, and limits. Formal PR review bodies were not available through the repository tool; the thread and author response supplied review context.
+
+The revised workflow requires project design discovery, renderer reuse, separate authentic evidence and annotations, a contact-sheet review before final rendering, and project-owned editable assets. These are workflow requirements, not a claim that the earlier Tycho run used the browser method or that Cukup had prior storyboard approval. No Tycho agent or video render was started for that skill edit.
+
+## Browser run and retained package
+
+On 2026-10-02, the editor reviewed the completed October 1 Desk run's coordinator record and fetched its authorized private source package. The package remained in the owning private repository. The editor checked its exact size and whole-file hash, all 411 ZIP entries' CRCs, and all 409 manifest-listed files' sizes and hashes. `DELIVERY.txt` was outside the member manifest but covered by the whole-ZIP checksum. The packaged MP4 matched the independently reviewed video.
+
+The production record showed one provider initialization and result, no recorded structured correction, separate bridge and terminal schemas, hash-bound preview approval, and later report consumption and acknowledgment. It used an adapted deterministic browser renderer with local Kokoro narration, not the earlier Python slide renderer. Thirteen seek timestamps passed repeated and out-of-order comparisons after a browser paint-settle correction.
+
+The 111.3-second output passed full decode, scene-audio, timing, caption, and full normal-speed audiovisual/privacy review. Encoded loudness was -16.01 LUFS with -2.34 dBTP. Player controls and end-to-end playback passed, but 2,689 dropped frames left smooth headless playback unproved. Small embedded text remained limited at 390px. Actual-device and iOS playback were not tested. The user later preferred the Tycho version; this is not universal device acceptance.
+
+The recorded provider time was 94m03s; rendering took about 50 minutes. Reported list cost was $8.65, not billing proof, and excluded coordinator/review work. A delivery URL previously returned different bytes, which required exact native-file verification. These observations support the identity, preview, process-monitoring, and retention requirements. They are not new application tests or authorization to repeat the run.
+
 ## Source checks
 
 - Metadata, exact skill name, explicit invocation, size, and local Markdown links passed checks.

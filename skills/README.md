@@ -85,7 +85,7 @@ review skills, `pr-e2e-evidence`, `managing-dev-environments`, `fizzy`,
 `log-fleet`, and `sync-skills`.
 
 Occasional workflows such as `hey-cli-second-identity`, `show-me`,
-`squash-commits`, and `teach` are optional. Install any explicit selection by
+`squash-commits`, `teach`, and `tycho-video-explainer` are optional. Install any explicit selection by
 passing its names; no profile or alias layer is involved.
 
 The default target remains `~/.agents/skills`; override it with
@@ -93,6 +93,28 @@ The default target remains `~/.agents/skills`; override it with
 without changing anything. The installer touches only selected names, refuses
 to overwrite a real directory or file, and replaces an existing symlink only
 for a selected name. Foreign-owned and deselected entries are left alone.
+
+### Tycho explainer distribution
+
+Cara owns `tycho-video-explainer`. The Amp User Skills repository carries an
+exact mirror of that directory for orb and global discovery. Edit Cara first;
+with publication approval, publish the same files to the mirror and compare
+every file hash. Keep private media and production packages in their owning
+repositories. Never edit Amp's generated global-skills cache.
+
+For a Tycho-only rollout, fast-forward a clean Cara checkout, then run
+`skills/install.sh tycho-video-explainer`. Use `AGENT_SKILLS_DIR` to install the
+same selection into each configured local agent root. Preserve real directories
+and unrelated changes; report conflicts instead of replacing them. This targeted
+install does not need unrelated upstream updates or a Tycho runtime upgrade.
+
+Verify resolved links, the complete file inventory, and hashes against the
+published source at every configured discovery root. Run
+`node skills/validate-installed-skill.mjs <installed-skill-directory>` to check
+local references and explicit Codex invocation. Reload Amp skills and check the
+active source, including its bundled references. New threads use the published
+global mirror; existing sessions need a skill reload. Skill installation does
+not prove provider readiness or authorize a video run.
 
 Shell scripts under `setup/` and `skills/` are covered by destructive-command scanning. If you add or change a script, run `dcg scan --paths setup/ skills/ --fail-on error` when `dcg` is installed; CI also scans scripts and workflows. Prefer installing `dcg` through machine configuration rather than an ad-hoc local installer when the machine is managed declaratively.
 

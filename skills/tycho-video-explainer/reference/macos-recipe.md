@@ -4,7 +4,9 @@ Use on an authorized macOS host with the required tools installed. Follow the ma
 
 ## 1. Prepare the renderer
 
-The producer supplies `render.py`, scene data, and numbered `s*.tts.txt` narration files in a task-owned directory. This skill includes no renderer or private scenes. Inspect the script before execution. Require writes to remain within authorized locations.
+Use the renderer selected under the main skill's design and history checks. The Python method below records an earlier run; it is not the visual default. For a browser renderer, read the [browser production reference](browser-production.md) and use that renderer's interface with the generated speech. Complete the main skill's contact-sheet gate before final rendering with either method.
+
+For the recorded Python method, the producer supplies `render.py`, scene data, and numbered `s*.tts.txt` narration files in a task-owned directory. This skill includes no renderer or private scenes. Inspect the script before execution. Require writes to remain within authorized locations.
 
 The tested renderer used Python 3, Pillow, NumPy, macOS Arial/Arial Unicode fonts, Samantha, and FFmpeg/FFprobe. It measured WAV narration. Each scene had 0.25 seconds of leading silence and 0.40 seconds of trailing silence. It wrote `narration.wav` and scene timings. It streamed RGB24 frames at 1280×720 and 30 fps. These are example settings, not universal requirements.
 
