@@ -29,7 +29,6 @@ Use globally installed upstream skills alongside these shared skills. Upstream-t
 - `codebase-design` - shared deep-module vocabulary for architecture and interface decisions.
 - `diagnosing-bugs` - renamed upstream replacement for `diagnose`.
 - `writing-for-agents` - model-invoked reference for skills, agent instructions, and other documents agents consume. Renamed upstream from `writing-great-skills`.
-- `resolving-merge-conflicts` - resolve in-progress git merge or rebase conflicts.
 - `handoff` - compact a long session into a handoff document before switching agents or tasks.
 - `grill-me` - stateless user-invoked grilling when no working directory should retain the result.
 - `to-questionnaire` - turn an external decision gap into a questionnaire for the person who can answer it.
@@ -50,6 +49,8 @@ Use globally installed upstream skills alongside these shared skills. Upstream-t
 - `typesafe-ai` - build AI features with TypeSafe System One models (Jev): typed judgments and probabilities that code composes, instead of prompt-and-parse steps. Model-invoked; reads the live docs at `docs.typesafe.ai` as its source of truth. Installed from [`typesafe-ai/skills`](https://github.com/typesafe-ai/skills).
 
 Deprecated or replaced upstream skills such as `writing-great-skills`, `ubiquitous-language`, `design-an-interface`, `qa`, `request-refactor-plan`, `caveman`, `zoom-out`, `to-prd`, `to-issues`, and `to-plan` should remain uninstalled unless they become local-owned skills with explicit documented behavior.
+
+`resolving-merge-conflicts` is also excluded and removed during synchronization. Its pinned instructions forbid aborting and require staging everything. Let the agent resolve conflicts without those rules. The pinned `ask-matt` router still mentions this unavailable skill.
 
 Upstream `wizard` is deliberately uninstalled. Its v1.2.3 model-invoked template permits an unconstrained `ENV_FILE` and ambient GitHub repository writes; see [ADR 005](../docs/decisions/005-defer-upstream-wizard.md).
 

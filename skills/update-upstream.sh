@@ -24,7 +24,6 @@ UPSTREAM_SKILLS=(
   codebase-design
   diagnosing-bugs
   writing-for-agents
-  resolving-merge-conflicts
   handoff
   prototype
   improve-codebase-architecture
@@ -65,6 +64,7 @@ TYPESAFE_SKILLS=(
 # The skills installer does not remove old skills, so use `skills remove` for
 # agent-specific cleanup, then fall back to filesystem removal for any stragglers.
 DEPRECATED_UPSTREAM_SKILLS=(
+  resolving-merge-conflicts
   to-prd
   to-issues
   to-plan
