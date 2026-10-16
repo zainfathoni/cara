@@ -26,10 +26,25 @@ assert_link() {
 default_root="$TMP_ROOT/default"
 mkdir -p "$default_root"
 ln -s "$SKILLS_ROOT/log-notes" "$default_root/log-notes"
+ln -s "$SKILLS_ROOT/tycho-video-explainer" "$default_root/tycho-video-explainer"
 AGENT_SKILLS_DIR="$default_root" "$INSTALLER" >/dev/null
 [ ! -L "$default_root/log-notes" ] || fail "renamed log-notes link was preserved"
+[ ! -L "$default_root/tycho-video-explainer" ] || fail "retired Cara skill link was preserved"
+
+marked_root="$TMP_ROOT/marked-copy"
+marked_copy="$marked_root/tycho-video-explainer"
+mkdir -p "$marked_copy"
+printf '%s\n' '---' 'name: tycho-video-explainer' '---' > "$marked_copy/SKILL.md"
+: > "$marked_copy/.amp-installed-skill"
+AGENT_SKILLS_DIR="$marked_root" "$INSTALLER" > "$TMP_ROOT/marked-install.out"
+[ ! -e "$marked_copy" ] || fail "marked retired skill copy was preserved"
+grep -F "Removed retired Cara skill copy: $marked_copy" "$TMP_ROOT/marked-install.out" >/dev/null ||
+  fail "marked retired skill copy removal was not reported"
 
 "$INSTALLER" --list | sort > "$TMP_ROOT/expected-defaults"
+if grep -Fxq tycho-video-explainer "$TMP_ROOT/expected-defaults"; then
+  fail "retired skill remained in the default selection"
+fi
 find "$default_root" -mindepth 1 -maxdepth 1 -type l -exec basename {} \; | sort > "$TMP_ROOT/actual-defaults"
 diff -u "$TMP_ROOT/expected-defaults" "$TMP_ROOT/actual-defaults" || fail "default install did not match --list"
 while IFS= read -r skill; do
@@ -41,12 +56,16 @@ selected_root="$TMP_ROOT/selected"
 mkdir -p "$selected_root"
 foreign_source="$TMP_ROOT/foreign-source"
 mkdir -p "$foreign_source"
+printf '%s\n' '---' 'name: tycho-video-explainer' '---' > "$foreign_source/SKILL.md"
+: > "$foreign_source/.amp-installed-skill"
 ln -s "$foreign_source" "$selected_root/foreign-skill"
 ln -s "$foreign_source" "$selected_root/log-notes"
+ln -s "$foreign_source" "$selected_root/tycho-video-explainer"
 AGENT_SKILLS_DIR="$selected_root" "$INSTALLER" show-me teach >/dev/null
 assert_link show-me "$selected_root"
 assert_link teach "$selected_root"
 [ "$(readlink "$selected_root/foreign-skill")" = "$foreign_source" ] || fail "foreign symlink was changed"
+[ "$(readlink "$selected_root/tycho-video-explainer")" = "$foreign_source" ] || fail "foreign retired-name symlink was changed"
 
 # A default sync must not restore every Cara source or remove explicit and
 # foreign-owned selections that already exist in the same root.
@@ -54,6 +73,7 @@ AGENT_SKILLS_DIR="$selected_root" "$INSTALLER" >/dev/null
 assert_link show-me "$selected_root"
 assert_link teach "$selected_root"
 [ "$(readlink "$selected_root/foreign-skill")" = "$foreign_source" ] || fail "default sync changed foreign symlink"
+[ "$(readlink "$selected_root/tycho-video-explainer")" = "$foreign_source" ] || fail "default sync changed foreign retired-name symlink"
 [ "$(readlink "$selected_root/log-notes")" = "$foreign_source" ] || fail "default sync changed foreign renamed-skill link"
 
 for removed_skill in \
@@ -72,11 +92,15 @@ if AGENT_SKILLS_DIR="$TMP_ROOT/unknown" "$INSTALLER" not-a-skill >/dev/null 2>&1
 fi
 
 occupied_root="$TMP_ROOT/occupied"
-mkdir -p "$occupied_root/fizzy"
+mkdir -p "$occupied_root/fizzy" "$occupied_root/tycho-video-explainer"
+printf '%s\n' '---' 'name: tycho-video-explainer' '---' > "$occupied_root/tycho-video-explainer/SKILL.md"
+printf 'user-owned\n' > "$occupied_root/tycho-video-explainer/marker"
 if AGENT_SKILLS_DIR="$occupied_root" "$INSTALLER" fizzy >/dev/null 2>&1; then
   fail "real target directory was overwritten"
 fi
 [ -d "$occupied_root/fizzy" ] || fail "real target directory was removed"
+[ "$(cat "$occupied_root/tycho-video-explainer/marker")" = user-owned ] ||
+  fail "real retired-name directory was changed"
 
 traversal_root="$TMP_ROOT/custom"
 traversal_sibling="$TMP_ROOT/skills"

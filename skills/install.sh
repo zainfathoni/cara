@@ -22,6 +22,12 @@ DEFAULT_SKILLS=(
   team-review-resolve
 )
 
+# Retired local-owned skills. Remove only exact-source links or marked managed
+# copies; leave other similarly named installations untouched.
+RETIRED_LOCAL_SKILLS=(
+  tycho-video-explainer
+)
+
 usage() {
   printf 'Usage: skills/install.sh [--list] [SKILL...]\n'
   printf '\n'
@@ -80,6 +86,23 @@ if [ "$list_only" = true ]; then
 fi
 
 mkdir -p "$TARGET_ROOT"
+
+for skill_name in "${RETIRED_LOCAL_SKILLS[@]}"; do
+  target="$TARGET_ROOT/$skill_name"
+  source="$SKILLS_ROOT/$skill_name"
+  if [ -L "$target" ] && [ "$(readlink "$target")" = "$source" ]; then
+    rm -- "$target"
+    printf 'Removed retired Cara skill link: %s\n' "$target"
+  elif [ -d "$target" ] &&
+    [ ! -L "$target" ] &&
+    [ -f "$target/.amp-installed-skill" ] &&
+    [ ! -L "$target/.amp-installed-skill" ] &&
+    [ -f "$target/SKILL.md" ] &&
+    grep -Fxq "name: $skill_name" "$target/SKILL.md"; then
+    rm -r -- "$target"
+    printf 'Removed retired Cara skill copy: %s\n' "$target"
+  fi
+done
 
 for skill_name in "${selected_skills[@]}"; do
   if [ "$skill_name" = log-fleet ] &&
