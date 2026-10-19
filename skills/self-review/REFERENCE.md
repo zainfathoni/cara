@@ -1,6 +1,6 @@
 # Self Review GitHub API Reference
 
-Read only the section needed for the current step. Commands use `{owner}/{repo}` placeholders supported by `gh api`; replace `<pr-number>` and IDs explicitly.
+Read the section for the current step. Replace `<pr-number>` and IDs. `gh api` supports the `{owner}/{repo}` placeholders.
 
 ## Read the PR
 
@@ -27,7 +27,7 @@ gh api --paginate repos/{owner}/{repo}/pulls/<pr-number>/reviews \
 gh api --paginate repos/{owner}/{repo}/pulls/<pr-number>/comments
 ```
 
-Use GraphQL when complete thread state or comment node IDs are required:
+Use GraphQL for thread state, diff ranges, and comment node IDs:
 
 ```bash
 gh api graphql --paginate -f owner='{owner}' -f repo='{repo}' -F number=<pr-number> -f query='
@@ -35,7 +35,7 @@ query($owner:String!, $repo:String!, $number:Int!, $endCursor:String) {
   repository(owner:$owner, name:$repo) {
     pullRequest(number:$number) {
       reviewThreads(first:100, after:$endCursor) {
-        nodes { isResolved comments(first:100) { nodes { id databaseId body path line originalLine state author { login } pullRequestReview { id databaseId state author { login } } } } }
+        nodes { id isResolved path diffSide line startDiffSide startLine comments(first:100) { nodes { id fullDatabaseId body path line startLine originalLine state author { login } pullRequestReview { id fullDatabaseId state author { login } } } pageInfo { hasNextPage endCursor } } }
         pageInfo { hasNextPage endCursor }
       }
     }
@@ -43,11 +43,11 @@ query($owner:String!, $repo:String!, $number:Int!, $endCursor:String) {
 }'
 ```
 
-Filter comments by the pending review's numeric or node ID, not merely by author. Confirm zero or one current-user pending review before mutation.
+Filter comments by review ID, not only by author. If a thread's comments have another page, fetch it with that connection's cursor; outer pagination covers threads only.
 
 ## Create a new pending review
 
-Create only when inventory proves no current-user pending review exists. Omit `event` entirely:
+Use only after inventory confirms no current-user pending review. Omit `event`:
 
 ```bash
 cat <<'EOF' | gh api repos/{owner}/{repo}/pulls/<pr-number>/reviews --method POST --input -
@@ -60,11 +60,11 @@ cat <<'EOF' | gh api repos/{owner}/{repo}/pulls/<pr-number>/reviews --method POS
 EOF
 ```
 
-For suggestion widgets, create the shell without comments, capture `.node_id`, and add threads using the GraphQL mutation below. A ````suggestion` fenced block remains pending when its thread belongs to the pending review.
+For suggestions, create an empty review, save `.node_id`, then add threads with the GraphQL mutation below.
 
 ## Reconcile in place
 
-Actual safe mechanics are **append/update/delete comments inside the existing pending review**, not delete-and-recreate. Snapshot the intended set first and preserve the review IDs throughout.
+Add, update, or delete comments within the existing pending review. Preserve the review ID. Re-read before writing as required by [self-review](SKILL.md#2-compare-findings-and-saved-comments).
 
 ### Update the review summary
 
@@ -77,24 +77,31 @@ gh api repos/{owner}/{repo}/pulls/<pr-number>/reviews/<numeric-review-id> \
 
 Use this for ordinary comments and suggestions. `startLine`/`startSide` are optional and only for multi-line anchors.
 
-```bash
+````bash
 body=$(cat <<'EOF'
 **Functional regression:** concise behavior and impact.
+
+Please retain the required check.
+
+<details>
+<summary>Suggested fix</summary>
 
 ```suggestion
 replacement code
 ```
+
+</details>
 EOF
 )
 
 gh api graphql \
-  -f query='mutation($review:ID!, $path:String!, $line:Int!, $side:DiffSide!, $body:String!) { addPullRequestReviewThread(input:{pullRequestReviewId:$review,path:$path,line:$line,side:$side,body:$body}) { thread { comments(first:1) { nodes { id databaseId body pullRequestReview { databaseId state } } } } } }' \
+  -f query='mutation($review:ID!, $path:String!, $line:Int!, $side:DiffSide!, $body:String!) { addPullRequestReviewThread(input:{pullRequestReviewId:$review,path:$path,line:$line,side:$side,body:$body}) { thread { comments(first:1) { nodes { id fullDatabaseId body pullRequestReview { fullDatabaseId state } } } } } }' \
   -f review='<pending-review-node-id>' \
   -f path='path/to/file.js' \
   -F line=42 \
   -f side='RIGHT' \
   -f body="$body"
-```
+````
 
 Multi-line form adds `$startLine:Int!` and `$startSide:DiffSide!` variables and `startLine:$startLine,startSide:$startSide` to the input.
 
@@ -102,7 +109,7 @@ Multi-line form adds `$startLine:Int!` and `$startSide:DiffSide!` variables and 
 
 ```bash
 gh api graphql \
-  -f query='mutation($id:ID!, $body:String!) { updatePullRequestReviewComment(input:{pullRequestReviewCommentId:$id,body:$body}) { pullRequestReviewComment { id databaseId body } } }' \
+  -f query='mutation($id:ID!, $body:String!) { updatePullRequestReviewComment(input:{pullRequestReviewCommentId:$id,body:$body}) { pullRequestReviewComment { id fullDatabaseId body } } }' \
   -f id='<comment-node-id>' \
   -f body='Reconciled comment body'
 ```
@@ -113,11 +120,11 @@ Removing a stale comment is an in-place reconciliation. First prove the comment 
 
 ```bash
 gh api graphql \
-  -f query='mutation($id:ID!) { deletePullRequestReviewComment(input:{pullRequestReviewCommentId:$id}) { clientMutationId } }' \
+  -f query='mutation($id:ID!) { deletePullRequestReviewComment(input:{id:$id}) { clientMutationId } }' \
   -f id='<comment-node-id>'
 ```
 
-If an artifact lacks a usable node ID, a mutation is rejected, or exact in-place state cannot be established, do not delete the review as a shortcut. Stop and require explicit use of `review-clear`; after it verifies and deletes the draft, rerun inventory before creating anything.
+If a node ID is unavailable, a mutation fails, or exact state cannot be verified, stop. Follow [self-review's deletion boundary](SKILL.md#3-save-in-place); do not replace the review.
 
 ## Parameters
 
@@ -132,31 +139,13 @@ If an artifact lacks a usable node ID, a mutation is rejected, or exact in-place
 | review numeric ID | REST review identifier |
 | review/comment node ID | GraphQL global identifier |
 
-Do not send `event: PENDING`; no such review event exists. Do not use `POST /repos/{owner}/{repo}/pulls/<pr-number>/comments` for drafts.
-
 ## Comment and suggestion mechanics
 
-- State the concrete behavior, impact, and requested direction; avoid vague preferences.
-- Put a suggestion fence on an applicable changed line and include only replacement text.
-- Use a language fence for illustrative code that is not directly applyable.
-- For a proven regression, a compact “Minimal failing case” may include essential setup, assertion, and received value.
-- Keep each comment focused on one concern; merge duplicates during reconciliation.
-
-Example:
-
-````markdown
-**Authorization regression:** this lookup is no longer scoped to the current account, so an ID from another tenant can be updated.
-
-Please retain the account scope:
-
-```suggestion
-const booking = await account.bookings.find(id)
-```
-````
+Use [team-review's content requirements](../team-review/SKILL.md#2-write-author-facing-findings). Anchor each suggestion to the range it replaces and include only replacement text inside the fence.
 
 ## Submit only when explicitly instructed
 
-Submission changes visibility and is outside the default self-review result. Only after an explicit event instruction, submit the existing numeric pending-review ID:
+Only after [explicit submission authorization](SKILL.md#explicit-submission-boundary), submit the existing numeric review ID:
 
 ```bash
 cat <<'EOF' | gh api repos/{owner}/{repo}/pulls/<pr-number>/reviews/<numeric-review-id>/events --method POST --input -
@@ -164,4 +153,4 @@ cat <<'EOF' | gh api repos/{owner}/{repo}/pulls/<pr-number>/reviews/<numeric-rev
 EOF
 ```
 
-Allowed explicit events are `COMMENT`, `APPROVE`, and `REQUEST_CHANGES`. Verify the resulting submitted state and visibility. Never submit merely to make a comment or suggestion appear.
+Read the review again to verify the submitted state and visibility. Submission is not needed to save suggestions.

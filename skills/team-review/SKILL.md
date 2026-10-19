@@ -1,50 +1,44 @@
 ---
 name: team-review
-description: Reviews teammate PRs and drafts evidence-backed feedback in a current-user PENDING review. Use for colleague-facing review before publication.
+description: Reviews teammate PRs and writes author-facing findings. Use for evidence-backed inline feedback in a current-user PENDING review.
 ---
 
 # Team Review
 
-Produce a rigorous colleague-facing review without publishing feedback prematurely. Every review is drafted and verified as `PENDING` before any explicit submission.
+Review the change independently. Write for the PR author, then save a `PENDING` GitHub review with inline findings and a brief overview.
 
 Suggested command: `/team-review <pr-number-or-url>`
 
-## Invariants
+## 1. Review the change
 
-- Review independently before reading existing current-user pending feedback.
-- Inspect every changed risk area: correctness, regressions, authorization and data ownership, security, performance, maintainability, and tests.
-- Give every finding a severity, concrete impact, supporting evidence, and confidence. Do not publish unsupported suspicions.
-- Use [`self-review`](../self-review/SKILL.md) as the sole authority for pending-review creation, inventory, reconciliation, mutation, suggestions, and verification. Do not duplicate or improvise those mechanics here.
-- Never use the REST pull-comment endpoint (`POST /pulls/{pull_number}/comments`) for draft feedback; it publishes immediately.
-- Never submit without an explicit instruction naming `COMMENT`, `APPROVE`, or `REQUEST_CHANGES`.
-- Never approve while unresolved correctness, security, data-integrity, authorization, or data-ownership concerns remain.
+Read the PR context, base and head revisions, full diff, changed files, call sites, tests, history, and repository guidance. Review correctness, regressions, authorization, data ownership, security, performance, maintainability, and tests before reading existing pending feedback.
 
-## Workflow
+Verify each concern against the reviewed revision. Prefer a focused failing test where it can demonstrate the defect. Use the `tdd` skill for one-test-at-a-time proof when feasible. Otherwise, use browser behavior, logs, API results, or direct code-path evidence. Remove temporary proof-only changes.
 
-### 1. Review the change independently
+Record severity, relevant diff range, failing scenario, effect, evidence, confidence, and required correction. Distinguish observed behavior from inference. Worker tests and DOM checks are not end-to-end (E2E) proof. State which paths were not exercised.
 
-Read the PR context, full diff, changed files, relevant call sites, tests, ownership boundaries, and repository guidance. Classify changed areas by risk and verify behavior against implementation rather than assumptions. Do not inspect an existing pending draft yet.
+**Complete when:** each changed risk area has been reviewed or has an explicit residual-risk note, and each finding has supporting evidence.
 
-**Complete when:** all changed risk areas have been inspected, or each unverified area has an explicit residual-risk note.
+## 2. Write author-facing findings
 
-### 2. Establish colleague-ready findings
+Order findings by severity. Keep each inline comment focused on one concern and attach it to the relevant code range. State the defect, its effect, and the required correction. Explain the code, not the agent's internal process.
 
-For each concern, record severity, changed-side path and line, concrete failing scenario and impact, evidence, confidence, and a useful fix direction. Prefer a focused failing test and use the `tdd` skill's one-test-at-a-time proof discipline when feasible; otherwise use browser behavior, logs, API output, or a direct code-path proof. Keep public wording concise and actionable, and remove temporary proof-only changes.
+- Preserve material caveats and policy questions. Label unresolved choices as questions, not proven defects; ask for the decision needed. Do not invent failing tests for policy questions or add unsupported suspicions as findings.
+- Include small failing test snippets when they demonstrate a defect. Run them on the reviewed revision and report the revision, command, and actual result. If a snippet cannot be run, label it **Unrun** and state why. Separate executed results from illustrative examples.
+- Use `suggestion` blocks only for sufficiently established replacements. Use ordinary language-tagged code blocks for illustrative fixes.
+- Put tests and suggested fixes inside `<details>` sections with a `<summary>` label. Keep the defect, effect, required correction, and material caveats visible outside them.
+- Keep the overview brief. Put shared test setup once there, in a collapsed section. If there are no findings, say so and state testing gaps or residual risks.
 
-Order findings by severity. If there are none, state that and identify testing gaps or residual risks.
+**Complete when:** each comment is actionable, its evidence has an accurate status, and unresolved questions remain explicit.
 
-**Complete when:** every finding has evidence and confidence, and unsupported concerns have been omitted or clearly retained only as residual risk.
+## 3. Save the pending review
 
-### 3. Create and verify the pending draft
+Follow [`self-review`](../self-review/SKILL.md) with the completed finding set. It is the sole authority for draft inventory, in-place changes, suggestion mechanics, and exact verification. Read the existing draft before editing and preserve others' changes through that workflow.
 
-Only after the independent finding set is complete, follow `self-review` end to end to inventory, create or reconcile, and verify the current user's single pending review. The final body and comments must be complete, exact, colleague-ready, and still unpublished.
+Report the verified review link and `PENDING` state. State any verification gap instead of claiming completion.
 
-**Complete when:** `self-review` verification proves the complete reconciled draft belongs to the authenticated user, contains exactly the intended feedback, and remains `PENDING`.
+## 4. Recommend a decision
 
-### 4. Decide publication
+Recommend `COMMENT`, `APPROVE`, or `REQUEST_CHANGES`. Do not recommend approval while correctness, security, data-integrity, authorization, or data-ownership concerns remain unresolved.
 
-Recommend `COMMENT`, `APPROVE`, or `REQUEST_CHANGES` from the verified findings and severity. Any unresolved correctness, security, data-integrity, authorization, or data-ownership concern prevents approval. Unless the user has already explicitly authorized a named event, report the recommendation and stop with the draft pending.
-
-If explicitly authorized, follow [`self-review`'s submission boundary](../self-review/SKILL.md#explicit-submission-boundary) to submit and verify the existing pending review; never create another review.
-
-**Complete when:** either the verified draft remains pending with a publication recommendation, or the existing draft was explicitly submitted and its resulting publication state and visibility were re-read and reported.
+Leave the draft pending unless the user explicitly authorizes a named event. For submission, follow [`self-review`'s submission boundary](../self-review/SKILL.md#explicit-submission-boundary).
