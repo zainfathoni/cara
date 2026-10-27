@@ -104,6 +104,12 @@ Shell scripts under `setup/` and `skills/` are covered by destructive-command sc
 
 All review skills default to a current-user **PENDING** review and never submit, publish, publicly reply, resolve, or delete review content without explicit instruction.
 
+Cara owns the review skills listed below. Their shared initial-review contract is [Review Setup](team-review/SETUP.md). The [agent guidance template](../setup/templates/agent-skills-block.md) provides dispatch rules even when a skill is missing from discovery; existing repositories receive that guidance only when their managed block is updated.
+
+Amp's built-in `Review` prompt and official Amp skills are separate from Cara. The upstream `code-review` installed by `update-upstream.sh` comes from `mattpocock/skills` at the script's pinned release. It requires parallel initial subagent reviews and is not a substitute for Cara's initial-review contract. A generic installed `review` is not in Cara's source or install allowlist; inspect its resolved path and package provenance before assigning ownership. Do not edit external installations or Amp-managed caches to change Cara behavior. `review-skill` is not a Cara skill name.
+
+Install the full `team-review` and `self-review` directories together so their shared references resolve. After a source update, verify the installed source paths and reload skills in each affected session. A local symlink update does not publish a skill to Amp's personal or workspace skills repositories, and a reload does not install a missing skill.
+
 ### Source-aware review skills
 
 These handle review comments regardless of source — current-user pending drafts *or* teammate-visible threads — and apply source-specific safety internally:

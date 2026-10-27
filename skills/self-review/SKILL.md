@@ -11,7 +11,7 @@ Suggested command: `/self-review <pr-number-or-url>`
 
 ## Prepare findings
 
-Use a completed independent finding set, or follow [`team-review` step 1](../team-review/SKILL.md#1-review-the-change). Apply its [author-facing content requirements](../team-review/SKILL.md#2-write-author-facing-findings), then continue here. Do not read existing pending feedback before the independent pass is complete.
+Use a completed independent finding set tied to the current PR head, or follow [`team-review` step 1](../team-review/SKILL.md#1-review-the-change), including its required [Review Setup](../team-review/SETUP.md). Apply its [author-facing content requirements](../team-review/SKILL.md#2-write-author-facing-findings), then continue here. Do not read existing pending feedback before the independent pass is complete.
 
 ## 1. Read the existing draft
 
@@ -30,6 +30,8 @@ Give each finding and existing comment one disposition: retain, revise, remove, 
 Record the intended body and full comment set before changes. Re-read the draft immediately before writing. If it changed, compare again and preserve those edits. If an edit conflicts with a required correction, stop and explain the conflict instead of overwriting it.
 
 ## 3. Save in place
+
+Re-read the PR head before writing. If it differs from the finding set's revision, return to Prepare findings before saving.
 
 Read the [in-place change reference](REFERENCE.md#reconcile-in-place) before writing. If no draft exists, [create one](REFERENCE.md#create-a-new-pending-review). Otherwise, update the same review and its comments by ID.
 

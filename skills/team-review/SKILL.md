@@ -11,6 +11,8 @@ Suggested command: `/team-review <pr-number-or-url>`
 
 ## 1. Review the change
 
+First complete [Review Setup](SETUP.md): load the skill, verify access, and check out the exact PR head in this thread. It also defines initial-review ownership and requested second opinions. Stop if setup is incomplete.
+
 Read the PR context, base and head revisions, full diff, changed files, call sites, tests, history, and repository guidance. Review correctness, regressions, authorization, data ownership, security, performance, maintainability, and tests before reading existing pending feedback.
 
 Verify each concern against the reviewed revision. Prefer a focused failing test where it can demonstrate the defect. Use the `tdd` skill for one-test-at-a-time proof when feasible. Otherwise, use browser behavior, logs, API results, or direct code-path evidence. Remove temporary proof-only changes.

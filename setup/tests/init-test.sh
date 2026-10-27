@@ -42,9 +42,14 @@ test ! -e "$workspace/ralph.sh"
 test ! -e "$workspace/PROMPT.md"
 test ! -e "$workspace/.ralph"
 grep -q 'Issues live as GitHub issues in `owner/project`' "$workspace/AGENTS.md"
+grep -Fq 'skills/team-review/SETUP.md' "$workspace/AGENTS.md"
+grep -Fq '# Existing instructions' "$workspace/AGENTS.md"
+PATH="$fake_bin:$PATH" "$SETUP_DIR/init.sh" --yes --workspace "$workspace" >/dev/null
+test "$(grep -Fc 'skills/team-review/SETUP.md' "$workspace/AGENTS.md")" -eq 1
+grep -Fq '# Existing instructions' "$workspace/AGENTS.md"
 if rg -n 'Ralph|ralph' "$workspace/AGENTS.md" "$workspace/docs/agents" >/dev/null; then
   printf 'Retired Ralph guidance was generated\n' >&2
   exit 1
 fi
 
-printf 'PASS: setup generates shared docs and labels without Ralph entrypoints\n'
+printf 'PASS: setup preserves instructions and generates review dispatch once, without Ralph entrypoints\n'

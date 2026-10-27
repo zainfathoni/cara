@@ -10,10 +10,10 @@ gh pr view <pr-number> --json number,title,url,author,baseRefName,headRefName,he
 gh pr diff <pr-number>
 ```
 
-For focused context, fetch refs as needed and use local Git:
+For new findings, complete [Review Setup](../team-review/SETUP.md) first. Use its verified base SHA and checked-out head for focused context, not branch names that can be stale or absent for fork PRs:
 
 ```bash
-git diff --unified=20 origin/<base-ref>...origin/<head-ref> -- path/to/file
+git diff --unified=20 <verified-base-sha>...HEAD -- path/to/file
 ```
 
 Line comments must anchor to lines represented in the PR diff. `RIGHT` means the new side; `LEFT` means the old side.
