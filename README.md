@@ -9,6 +9,13 @@ My ways of working with coding agents.
 - `setup/templates/*` - repo-local issue-tracker, triage, domain, and agent-instruction templates.
 - `skills/*` - reusable personal skills that can be installed globally by symlink.
 
+## Historical References
+
+[Explaining with Video snapshot](docs/skill-snapshots/explaining-with-video/REFERENCE.md)
+is an unmaintained reference, not an active skill. To use this workflow, you must
+install and maintain your own skill separately. Cara's skill installer does not
+include this snapshot, and Cara does not keep it synced with the maintained source.
+
 ## Workflow Contract
 
 Planning and triage are maintainer-initiated steps. `/prototype` is model-invoked so `/wayfinder` can use it directly.
