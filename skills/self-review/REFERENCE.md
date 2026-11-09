@@ -141,7 +141,7 @@ If a node ID is unavailable, a mutation fails, or exact state cannot be verified
 
 ## Comment and suggestion mechanics
 
-Use [team-review's content requirements](../team-review/SKILL.md#2-write-author-facing-findings). Anchor each suggestion to the range it replaces and include only replacement text inside the fence.
+Use [team-review's content requirements](../team-review/SKILL.md#3-write-author-facing-findings). Anchor each suggestion to the range it replaces and include only replacement text inside the fence.
 
 ## Submit only when explicitly instructed
 
