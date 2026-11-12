@@ -40,15 +40,15 @@ Record the canonical repository, PR number, head repository and branch, full hea
 
 Do the initial review yourself in this thread. Do not replace it with child-thread or subagent aggregation. A generic skill that requires parallel initial reviewers does not satisfy this contract.
 
-Choose the second opinion by the initial review's Amp mode:
+Choose the proposed second opinion from the model or agent that performed the initial review:
 
-- `medium` or `high` → Claude Code (`external-agent:claude-code`).
-- Claude Code → `high`, or `medium` when requested.
+- GPT-6.1 Sol (openai/gpt-6.1-sol) or GPT-6 Astra (openai/gpt-6-astra): offer the Claude Code agent (external-agent:claude-code) configured for Opus 5.5, with features: ["model:claude-opus-5-5"].
+- Claude Code: offer GPT-6 Astra (openai/gpt-6-astra), or GPT-6.1 Sol (openai/gpt-6.1-sol) when requested.
 
-An explicit user mode or model choice takes priority. For other initial modes, ask which consultation mode to use. Use the Amp mode shown in thread metadata; underlying model identity is not required. Report the selected mode, not model-provenance caveats. If the requested route is unavailable, ask before substituting. Consultation still requires a user request.
+An explicit user model or agent choice takes priority. Use the model's default effort unless the user requests an effort. For another initial model or agent, ask which second opinion to use. Use the configuration for the reviewed turn; a legacy Dial label alone does not identify its model. If that configuration is unavailable and no consultation route was requested, ask rather than infer it. Report the proposed model and agent route. Ask before substituting an unavailable route. Consultation still requires a user request.
 
 Use a separate reviewer thread only for a requested second opinion. Preserve its scope. Give it the reviewed revisions and a way to obtain the exact code; a branch name or commit ID alone does not transfer local work. That reviewer must verify its own checkout or state its evidence limits. Keep the initial checkout here and assess its findings against the same revision before combining results.
 
-Reuse a suitable same-PR consultant only when its Amp mode matches the choice above and any explicit model request is met. For a new consultant, use a safe existing application checkout as the thread's working directory and verify its ownership before use. Require the consultant to verify the reviewed revision from its checkout or transferred snapshot, and state any evidence limits. Follow repository executor rules. If no suitable location is available, ask for a location decision; do not create an unnecessary worktree or start at a parent directory containing unrelated repositories.
+Reuse a suitable same-PR consultant only when its current model and agent route match the choice above and any requested effort is met. For a new consultant, use a safe existing application checkout as the thread's working directory and verify its ownership before use. Require the consultant to verify the reviewed revision from its checkout or transferred snapshot, and state any evidence limits. Follow repository executor rules. If no suitable location is available, ask for a location decision; do not create an unnecessary worktree or start at a parent directory containing unrelated repositories.
 
 **Complete when:** initial-review ownership remains here, and every second opinion has explicit user intent, identified revisions, and stated evidence limits. For revision checks before saving, pending-review identity, concurrent edits, and submission, follow `self-review`; setup does not authorize publication.

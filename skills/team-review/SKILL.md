@@ -5,7 +5,7 @@ description: Reviews teammate PRs and writes author-facing findings. Use for evi
 
 # Team Review
 
-Review independently, prove defects, and save a concise `PENDING` draft. Then offer a second opinion in another Amp mode, or complete it if already requested. Submission is a separate action.
+Review independently, prove defects, and save a concise PENDING draft. Then offer an independent second opinion with a named model and agent route, or complete it if already requested. Submission is a separate action.
 
 Suggested command: `/team-review <pr-number-or-url>`
 
@@ -53,7 +53,7 @@ Report the verified review link and `PENDING` state. State any verification gap 
 
 ## 5. Offer or complete the second opinion
 
-After the draft is saved and verified, or after reporting source-only findings when drafting is not authorized, offer a second opinion unless the user has already requested or declined it for this review. Select its Amp mode through [Review Setup](SETUP.md#4-keep-initial-review-and-second-opinions-distinct). An offer is not permission to create a consultant. If it was not requested, include the proposed mode with the recommendation and leave any draft pending.
+After the draft is saved and verified, or after reporting source-only findings when drafting is not authorized, offer a second opinion unless the user has already requested or declined it for this review. Select its model and agent route through [Review Setup](SETUP.md#4-keep-initial-review-and-second-opinions-distinct). An offer is not permission to create a consultant. If it was not requested, name the proposed model and agent route with the recommendation and leave any draft pending.
 
 If requested, consult on the saved draft, or on private findings for source-only work. Follow the user's named consultation prompt when supplied, within the review's authorization limits. Give the consultant that exact material, available runnable proof and results, reviewed revisions, and remaining gaps. Follow [Review Setup](SETUP.md#4-keep-initial-review-and-second-opinions-distinct) for checkout and ownership requirements. Keep the consultation read-only unless separately authorized.
 
